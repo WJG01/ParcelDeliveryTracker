@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="commons-codec-1.15">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/commons-codec-1.15.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/gson-2.6.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/commons-codec-1.15-tests.jar!/" />
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/Downloads/commons-codec-1.15-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/commons-codec-1.15-bin.zip!/commons-codec-1.15/apidocs" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Downloads/commons-codec-1.15-sources.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/commons-codec-1.15-test-sources.jar!/" />
+      <root url="file://$PROJECT_DIR$/src" />
+    </SOURCES>
+  </library>
+</component>

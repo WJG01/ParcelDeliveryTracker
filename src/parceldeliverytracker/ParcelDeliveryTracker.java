@@ -12,8 +12,8 @@ import java.io.File;
  */
 public class ParcelDeliveryTracker {
 
-    private static String masterFolder = "master";
-    private static String fileName = masterFolder + "/chain.bin";
+    private static final String masterFolder = "master";
+    private static final String fileName = masterFolder + "/chain.bin";
 
     public static void main(String[] args) {
         Blockchain bc = Blockchain.getInstance(fileName);
