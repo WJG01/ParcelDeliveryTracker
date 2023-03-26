@@ -7,31 +7,23 @@ import java.util.List;
 
 public class Transaction implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3891440441905013644L;
-	private  String orderID;
-	private  long senderIC;
-	private  String senderAddress;
-	private  long recipientIC;
-	private String recipientAdress;
 
+	public final int SIZE = 10;
 
-	public Transaction(String orderID, long senderIC, String senderAddress, long recipientIC, String recipientAdress) {
-		this.orderID = orderID;
-		this.senderIC = senderIC;
-		this.senderAddress = senderAddress;
-		this.recipientIC = recipientIC;
-		this.recipientAdress = recipientAdress;
+	public String merkleRoot ;
+
+	public List<String> dataLst = new ArrayList<>();
+
+	public void add(String tranx) {
+		if (dataLst.size() < SIZE)
+			dataLst.add(tranx);
 	}
 
-	public String convertToString(){
-		return "orderID: "+orderID+" | senderIC: "+senderIC+" | senderAddress: " +senderAddress+" | recipientIC: "+recipientIC+" | recipientAdress: "+recipientAdress;
+	public void genMerkleRoot() {
+		MerkleTree mt = MerkleTree.getInstance(this.dataLst);
+		mt.build();
+		this.merkleRoot = mt.getRoot();
 	}
 
-	@Override
-	public String toString() {
-		return "orderID: "+orderID+" | senderIC: "+senderIC+" | senderAddress: " +senderAddress+" | recipientIC: "+recipientIC+" | recipientAdress: "+recipientAdress;
-	}
 }
