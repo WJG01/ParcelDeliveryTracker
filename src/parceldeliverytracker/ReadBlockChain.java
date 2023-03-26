@@ -1,14 +1,16 @@
 package parceldeliverytracker;
 
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ReadBlockChain {
 
     static LinkedList<Blockk> blockChainList = new LinkedList<Blockk>();
+    public static List<String> extractedResult = new ArrayList<>();
 
-    public static List<String> getBlockChainTransactions(String searchValue) throws Exception {
+    public static List<String> getBlockChainTransactions() throws Exception {
         String file = "master/chain.bin";
         Blockchainn bc = Blockchainn.getInstance(file);
         //bc.distribute();
@@ -23,6 +25,7 @@ public class ReadBlockChain {
 //                String[] tranx = transaction.split(",");
 //                String tranxSingle = tranx[0];
                 System.out.println(transaction);
+                extractedResult.add(transaction);
 
             }
         }

@@ -21,6 +21,30 @@ public record Transaction(String orderID, String senderIC, String senderAddress,
 		this.recipientAdress = recipientAdress;
 	}
 
+	@Override
+	public String orderID() {
+		return orderID;
+	}
+
+	@Override
+	public String senderIC() {
+		return senderIC;
+	}
+
+	@Override
+	public String senderAddress() {
+		return senderAddress;
+	}
+
+	@Override
+	public String recipientIC() {
+		return recipientIC;
+	}
+
+	@Override
+	public String recipientAdress() {
+		return recipientAdress;
+	}
 
 	@Override
 	public String toString() {
