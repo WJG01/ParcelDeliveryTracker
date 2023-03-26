@@ -10,7 +10,7 @@ public class ParcelDeliveryTracker {
     private static String masterFolder = "master";
     private static String fileName = masterFolder + "/chain.bin";
 
-    public static void main(String[] args) {
+    public static void insertRecord(String record) {
         Blockchain bc = Blockchain.getInstance(fileName);
         if (!new File(masterFolder).exists()) {
             System.err.println("> creating Blockchain binary !");
@@ -18,11 +18,8 @@ public class ParcelDeliveryTracker {
             bc.genesis();
         } else {
             /* dummy transaction */
-            String line1 = "bob|alice|debit|100";
-            String line2 = "mick|alice|debit|200";
             Transaction tranxLst = new Transaction();
-            tranxLst.add(line1);
-            tranxLst.add(line2);
+            tranxLst.add(record);
             tranxLst.genMerkleRoot();
             String previousHash = bc.get().getLast().getBlockHeader().getCurrentHash();
             Block b1 = new Block(previousHash);
