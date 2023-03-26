@@ -8,16 +8,14 @@ public class Blockk implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -1911051056455957018L;
-	/**
-     * 
-     */
+
     public Header blockHeader;
     public String merkleRoot;
     /* aggregation relationship */
     //public Transaction tranxLst;
     private ArrayList<Transaction> transactionsLst;
 
-    public Blockk(int index, ArrayList<Transaction> transactionsLst, String previousHash) {
+    public Blockk(int index, String previousHash) {
         long now = System.currentTimeMillis();
         /* construct part object upon object construction */
         this.blockHeader = new Header();
@@ -42,10 +40,7 @@ public class Blockk implements Serializable{
         this.blockHeader.setMerkleRoot(genMerkleRoot());
     }
 
-    //set whole list
-    public void setTranxLst(ArrayList<Transaction> tranxLst) {
-        this.transactionsLst = tranxLst;
-    }
+
 
     public String genMerkleRoot() {
         MerkleTree mt = MerkleTree.getInstance(this.transactionsLst);
@@ -93,15 +88,15 @@ public class Blockk implements Serializable{
         public int getIndex() {
             return index;
         }
+        public void setIndex(int index){
+            this.index = index;
+        }
         public void setMerkleRoot(String merkleRoot) { this.merkleRoot = merkleRoot;}
     }
     /* aggregation relationship */
-    public Transaction tranxLst;
-    public void setTranxLst(Transaction tranxLst) {
+    public ArrayList<Transaction>  tranxLst;
+    //set whole list
+    public void setTranxLst(ArrayList<Transaction> tranxLst) {
         this.tranxLst = tranxLst;
-    }
-    @Override
-    public String toString() {
-        return "Block [blockHeader=" + blockHeader + ", tranxLst=" + tranxLst + "]";
     }
 }

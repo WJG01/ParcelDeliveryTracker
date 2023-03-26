@@ -11,7 +11,7 @@ public class Blockchainn {
     // data structure
     private static LinkedList<Blockk> blockDB = new LinkedList<>();
     private static String masterFolder = "master";
-    private static String fileName = masterFolder +"/chain.bin";
+    private static String fileName = masterFolder + "/chain.bin";
     /**
      * singleton pattern
      */
@@ -19,8 +19,14 @@ public class Blockchainn {
 
     public String chainFile;
 
-    public Blockchainn() throws IOException {
 
+    public Blockchainn(String chainFile) {
+        super();
+        this.chainFile = chainFile;
+        System.out.println("> Blockchain object is created!");
+    }
+
+    public Blockchainn() throws IOException {
 
         File folder = new File(masterFolder);
         File file = new File(fileName);
@@ -33,30 +39,66 @@ public class Blockchainn {
             }
             System.out.println("fileName :" + fileName);
             this.chainFile = fileName;
-            System.out.println("chainFile :"+ this.chainFile);
-            Blockk genesisBlock = new Blockk(0, new ArrayList<Transaction>(), "0");
+            Blockchainn.getInstance(fileName);
+            Blockk genesisBlock = new Blockk(0, "0");
             blockDB.add(genesisBlock);
-            persist();
+            //persist();
         } else {
             this.chainFile = fileName;
-            blockDB = getExistingBlockChain();
+            blockDB = getExistingBlockChain(this.chainFile);
         }
 
     }
 
-    public void addTransaction(Transaction txn) {
+    public static Blockchainn getInstance(String chainFile) {
+        if (_instance == null)
+            _instance = new Blockchainn(chainFile);
+        return _instance;
+    }
+
+    /**
+     * get()
+     */
+    public static LinkedList<Blockk> getExistingBlockChain(String file) {
+        try (FileInputStream fin = new FileInputStream(file);
+             ObjectInputStream in = new ObjectInputStream(fin);
+        ) {
+            return (LinkedList<Blockk>) in.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void genesis() {
+        Blockk genesisBlock = new Blockk(0, "0");
+        blockDB.add(genesisBlock);
+        persist();
+    }
+
+    public void fetchPreviousBlock() {
+        blockDB = getExistingBlockChain(this.chainFile);
+    }
+
+    public void addTransaction(Blockchainn bc, Transaction txn) {
 // Get the last block in the chain
+
+
         Blockk lastBlock = blockDB.get(blockDB.size() - 1);
 
         // Check if the transaction list in the last block is full
-        if (lastBlock.getTransactionsLst().size() == MAX_TXN_LIST_SIZE) {
+        if (lastBlock.getTransactionsLst().size() == MAX_TXN_LIST_SIZE || lastBlock.getBlockHeader().getIndex() == 0) {
             // Create a new block with the transaction list and add it to the chain
-            Blockk newBlock = new Blockk(lastBlock.getBlockHeader().getIndex() + 1, new ArrayList<Transaction>(), lastBlock.getBlockHeader().getCurrentHash());
+            Blockk newBlock = new Blockk(lastBlock.getBlockHeader().getIndex() + 1, lastBlock.getBlockHeader().getCurrentHash());
             newBlock.addTransaction(txn);
-            ArrayList<Transaction> transactionLst =  newBlock.getTransactionsLst();
+            ArrayList<Transaction> transactionLst = newBlock.getTransactionsLst();
+            newBlock.setTranxLst(transactionLst);
+            newBlock.getBlockHeader().setIndex(lastBlock.getBlockHeader().getIndex() + 1);
             newBlock.genMerkleRoot();
+            //System.out.println(newBlock.toString());
             blockDB.add(newBlock);
             persist();
+
         } else {
             // Append the transaction to the transaction list in the last block
             ArrayList<Transaction> lastBlockTxn = lastBlock.getTransactionsLst();
@@ -64,22 +106,9 @@ public class Blockchainn {
             lastBlockTxn.add(txn);
             lastBlock.setTranxLst(lastBlockTxn);
             //ArrayList<Transaction> transactionLst = lastBlock.getTransactionsLst();
-            lastBlock.genMerkleRoot();
+            String merkleRoot = lastBlock.genMerkleRoot();
+            lastBlock.getBlockHeader().setMerkleRoot(merkleRoot);
             persist();
-        }
-    }
-
-    /**
-     * get()
-     */
-    public LinkedList<Blockk> getExistingBlockChain() {
-        try (FileInputStream fin = new FileInputStream(this.chainFile);
-             ObjectInputStream in = new ObjectInputStream(fin);
-        ) {
-            return (LinkedList<Blockk>) in.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -90,6 +119,7 @@ public class Blockchainn {
         try (FileOutputStream fout = new FileOutputStream(this.chainFile);
              ObjectOutputStream out = new ObjectOutputStream(fout);
         ) {
+            System.out.println("Writing data: " + blockDB);
             out.writeObject(blockDB);
             System.out.println(">> Master file is updated!");
         } catch (Exception e) {

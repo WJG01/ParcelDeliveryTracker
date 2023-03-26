@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
  * @author weiju
  */
 public class ParcelDeliveryTracker {
@@ -17,14 +16,36 @@ public class ParcelDeliveryTracker {
     private static final String fileName = masterFolder + "/chain.bin";
 
     public static void main(String[] args) {
-        Transaction newTransaction = new Transaction("O352353",0123123,"senderAdress",99453453,"recipientAdress");
-        try {
-            Blockchainn newBlockchain = new Blockchainn();
-            newBlockchain.addTransaction(newTransaction);
-            newBlockchain.distribute();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Blockchainn bc = Blockchainn.getInstance(fileName);
+        File folder = new File(masterFolder);
+        File file = new File(fileName);
+
+        Transaction newTransaction = new Transaction("O352353", 0123123, "senderAdress", 99453453, "recipientAdress");
+
+
+        if (!folder.exists() || !file.exists()) {
+            if (!folder.exists()) {
+                folder.mkdir();
+                if (!file.exists()) {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            bc.genesis();
+            bc.addTransaction(bc,newTransaction);
+            bc.distribute();
+        } else {
+            bc.fetchPreviousBlock();
+            bc.addTransaction(bc,newTransaction);
+            bc.distribute();
         }
+
+
+
+        //ReadBlockChain.getBlockChainTransactions("master/chain.bin");
     }
 }
 
