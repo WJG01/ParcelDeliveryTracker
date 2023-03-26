@@ -16,11 +16,6 @@ public class Blockchainn {
      * singleton pattern
      */
     private static Blockchainn _instance;
-//    public static Blockchainn getInstance(String chainFile ) {
-//        if(_instance == null)
-//            _instance = new Blockchainn( chainFile );
-//        return _instance;
-//    }
 
     public String chainFile;
 
@@ -58,8 +53,7 @@ public class Blockchainn {
             // Create a new block with the transaction list and add it to the chain
             Blockk newBlock = new Blockk(lastBlock.getBlockHeader().getIndex() + 1, new ArrayList<Transaction>(), lastBlock.getBlockHeader().getCurrentHash());
             newBlock.addTransaction(txn);
-            newBlock.addTransaction(txn);
-            //ArrayList<Transaction> transactionLst =  newBlock.getTransactionsLst();
+            ArrayList<Transaction> transactionLst =  newBlock.getTransactionsLst();
             newBlock.genMerkleRoot();
             blockDB.add(newBlock);
             persist();
@@ -67,7 +61,6 @@ public class Blockchainn {
             // Append the transaction to the transaction list in the last block
             ArrayList<Transaction> lastBlockTxn = lastBlock.getTransactionsLst();
             System.out.println("Existing transaction list: " + lastBlockTxn);
-            lastBlockTxn.add(txn);
             lastBlockTxn.add(txn);
             lastBlock.setTranxLst(lastBlockTxn);
             //ArrayList<Transaction> transactionLst = lastBlock.getTransactionsLst();
