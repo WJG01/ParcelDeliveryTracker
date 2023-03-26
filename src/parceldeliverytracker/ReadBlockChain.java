@@ -13,7 +13,7 @@ public class ReadBlockChain {
 //        blockChainList = bc.getExistingBlockChain(file);
 //
 //        for (int i = 1; i < blockChainList.size(); i++) {
-//            ArrayList<Transaction> TranxList = blockChainList.get(i).getTransactionsLst();
+//            List<String> TranxList = blockChainList.get(i).getTransactionsLst();
 //
 //            for (Transaction transaction : TranxList) {
 //                System.out.println(transaction.toString());

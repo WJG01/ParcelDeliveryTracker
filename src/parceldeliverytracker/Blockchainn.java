@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Blockchainn {
     public static final int MAX_TXN_LIST_SIZE = 10;
@@ -90,9 +91,9 @@ public class Blockchainn {
         if (lastBlock.getTransactionsLst().size() == MAX_TXN_LIST_SIZE || lastBlock.getBlockHeader().getIndex() == 0) {
             // Create a new block with the transaction list and add it to the chain
             Blockk newBlock = new Blockk(lastBlock.getBlockHeader().getIndex() + 1, lastBlock.getBlockHeader().getCurrentHash());
-            newBlock.addTransaction(txn);
-            ArrayList<Transaction> transactionLst = newBlock.getTransactionsLst();
-            newBlock.setTranxLst(transactionLst);
+            newBlock.addTransaction(txn.toString());
+            List<String> transactionLst = newBlock.getTransactionsLst();
+            newBlock.setTranxLst(txn);
             newBlock.getBlockHeader().setIndex(lastBlock.getBlockHeader().getIndex() + 1);
             newBlock.genMerkleRoot();
             //System.out.println(newBlock.toString());
@@ -101,11 +102,11 @@ public class Blockchainn {
 
         } else {
             // Append the transaction to the transaction list in the last block
-            ArrayList<Transaction> lastBlockTxn = lastBlock.getTransactionsLst();
+            List<String> lastBlockTxn = lastBlock.getTransactionsLst();
             System.out.println("Existing transaction list: " + lastBlockTxn);
-            lastBlockTxn.add(txn);
-            lastBlock.setTranxLst(lastBlockTxn);
-            //ArrayList<Transaction> transactionLst = lastBlock.getTransactionsLst();
+            lastBlockTxn.add(txn.toString());
+            lastBlock.setTranxLst(txn);
+            //List<String> transactionLst = lastBlock.getTransactionsLst();
             String merkleRoot = lastBlock.genMerkleRoot();
             lastBlock.getBlockHeader().setMerkleRoot(merkleRoot);
             persist();

@@ -6,7 +6,7 @@ import java.util.List;
 public class MerkleTree {
 
     private static MerkleTree instance;
-    private List<Transaction> tranxLst;
+    private List<String> tranxLst;
     private String root = "0";
 
     public String getRoot() {
@@ -17,13 +17,13 @@ public class MerkleTree {
      * * @implNote * Set the transaction list to the MerkleTree object. * *
      * @param tranxLst
      */
-    private MerkleTree(List<Transaction> tranxLst) {
+    private MerkleTree(List<String> tranxLst) {
         super();
         this.tranxLst = tranxLst;
     }
 
 
-    public static MerkleTree getInstance(List<Transaction> tranxLst) {
+    public static MerkleTree getInstance(List<String> tranxLst) {
         if (instance == null) {
             return new MerkleTree(tranxLst);
         }
@@ -36,14 +36,15 @@ public class MerkleTree {
      */
     public void build() {
         List<String> tempLst = new ArrayList<>();
-        for (Transaction tranx : this.tranxLst) {
-            tempLst.add(tranx.toString());
+        System.out.println("Checking here: "+ this.tranxLst);
+        for (String tranx : this.tranxLst) {
+            tempLst.add(tranx);
         }
         List<String> hashes = genTranxHashLst(tempLst);
         while (hashes.size() != 1) {
             hashes = genTranxHashLst(hashes);
         }
-        this.root = hashes.get(0).toString();
+        this.root = hashes.get(0);
     }
 
     /**

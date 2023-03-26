@@ -2,6 +2,7 @@ package parceldeliverytracker;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Blockk implements Serializable{
     /**
@@ -13,7 +14,7 @@ public class Blockk implements Serializable{
     public String merkleRoot;
     /* aggregation relationship */
     //public Transaction tranxLst;
-    private ArrayList<Transaction> transactionsLst;
+    private List<String> transactionsLst;
 
     public Blockk(int index, String previousHash) {
         long now = System.currentTimeMillis();
@@ -31,11 +32,11 @@ public class Blockk implements Serializable{
         return blockHeader;
     }
 
-    public ArrayList<Transaction> getTransactionsLst() {
+    public List<String> getTransactionsLst() {
         return transactionsLst;
     }
 
-    public void addTransaction(Transaction txn) {
+    public void addTransaction(String txn) {
         transactionsLst.add(txn);
         this.blockHeader.setMerkleRoot(genMerkleRoot());
     }
@@ -94,9 +95,12 @@ public class Blockk implements Serializable{
         public void setMerkleRoot(String merkleRoot) { this.merkleRoot = merkleRoot;}
     }
     /* aggregation relationship */
-    public ArrayList<Transaction>  tranxLst;
-    //set whole list
-    public void setTranxLst(ArrayList<Transaction> tranxLst) {
+    public Transaction tranxLst;
+    public void setTranxLst(Transaction tranxLst) {
         this.tranxLst = tranxLst;
+    }
+    @Override
+    public String toString() {
+        return "Block [blockHeader=" + blockHeader + ", tranxLst=" + tranxLst + "]";
     }
 }
