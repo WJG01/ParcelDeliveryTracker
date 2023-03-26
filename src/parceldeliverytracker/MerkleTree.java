@@ -5,28 +5,29 @@ import java.util.List;
 
 public class MerkleTree {
 
-    private List<String> tranxLst;
+    private static MerkleTree instance;
+    private List<Transaction> tranxLst;
     private String root = "0";
-
-    public String getRoot() {
-        return root;
-    }
 
     /**
      * * @implNote * Set the transaction list to the MerkleTree object. * *
+     *
      * @param tranxLst
      */
-    private MerkleTree(List<String> tranxLst) {
+    private MerkleTree(List<Transaction> tranxLst) {
         super();
         this.tranxLst = tranxLst;
     }
-    private static MerkleTree instance;
 
-    public static MerkleTree getInstance(List<String> tranxLst) {
+    public static MerkleTree getInstance(List<Transaction> tranxLst) {
         if (instance == null) {
             return new MerkleTree(tranxLst);
         }
         return instance;
+    }
+
+    public String getRoot() {
+        return root;
     }
 
     /**
@@ -34,14 +35,14 @@ public class MerkleTree {
      */
     public void build() {
         List<String> tempLst = new ArrayList<>();
-        for (String tranx : this.tranxLst) {
-            tempLst.add(tranx);
+        for (Transaction tranx : this.tranxLst) {
+            tempLst.add(tranx.toString());
         }
         List<String> hashes = genTranxHashLst(tempLst);
         while (hashes.size() != 1) {
             hashes = genTranxHashLst(hashes);
         }
-        this.root = hashes.get(0);
+        this.root = hashes.get(0).toString();
     }
 
     /**
@@ -54,10 +55,11 @@ public class MerkleTree {
         while (i < tranxLst.size()) {
             String left = tranxLst.get(i);
             i++;
-            String right = "";
+            String right = null;
             if (i != tranxLst.size()) {
                 right = tranxLst.get(i);
             }
+
             String hash = Hasher.sha256(left.concat(right));
             hashLst.add(hash);
             i++;
