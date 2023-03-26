@@ -1,30 +1,41 @@
 package parceldeliverytracker;
 
 //binary form
-
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public record Transaction(String orderID, long senderIC, String senderAddress, long recipientIC,
-                          String recipientAdress) implements Serializable {
+public class Transaction implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -3891440441905013644L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3891440441905013644L;
 
+	/**
+	 * 
+	 */
 
-    public Transaction(String orderID, long senderIC, String senderAddress, long recipientIC, String recipientAdress) {
-        this.orderID = orderID;
-        this.senderIC = senderIC;
-        this.senderAddress = senderAddress;
-        this.recipientIC = recipientIC;
-        this.recipientAdress = recipientAdress;
-    }
+	public final int SIZE = 10;
 
-    @Override
-    public String toString() {
-        return "orderID: "+orderID+" | senderIC: "+senderIC+" | senderAddress: " +senderAddress+" | recipientIC: "+recipientIC+" | recipientAdress: "+recipientAdress;
-    }
+	public String merkleRoot ;
+
+	public List<String> dataLst = new ArrayList<>();
+
+	public void add(String tranx) {
+		if (dataLst.size() < SIZE)
+			dataLst.add(tranx);
+	}
+	
+	public void genMerkleRoot() {
+		MerkleTree mt = MerkleTree.getInstance(this.dataLst);
+		mt.build();
+		this.merkleRoot = mt.getRoot();
+	}
+
+	@Override
+	public String toString() {
+		return "Transaction [SIZE=" + SIZE + ", merkleRoot=" + merkleRoot + ", dataLst=" + dataLst + "]";
+	}
 
 }

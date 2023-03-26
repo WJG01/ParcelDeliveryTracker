@@ -5,7 +5,6 @@
 package parceldeliverytracker;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  *
@@ -13,16 +12,30 @@ import java.io.IOException;
  */
 public class ParcelDeliveryTracker {
 
+    private static final String masterFolder = "master";
+    private static final String fileName = masterFolder + "/chain.bin";
 
     public static void main(String[] args) {
+        Blockchain bc = Blockchain.getInstance(fileName);
+        if (!new File(masterFolder).exists()) {
+            System.err.println("> creating Blockchain binary !");
+            new File(masterFolder).mkdir();
+            bc.genesis();
+        } else {
+            /* dummy transaction */
+            String line1 = "bob|alice|debit|100";
+            String line2 = "mick|alice|debit|200";
+            Transaction tranxLst = new Transaction();
+            tranxLst.add(line1);
+            tranxLst.add(line2);
+            tranxLst.genMerkleRoot();
+            String previousHash = bc.get().getLast().getBlockHeader().getCurrentHash();
+            Block b1 = new Block(previousHash);
+            b1.setTranxLst(tranxLst);
 
-        Transaction newTransaction = new Transaction("O352353",0123123,"senderAdress",99453453,"recipientAdress");
-        try {
-            Blockchainn newBlockchain = new Blockchainn();
-            newBlockchain.addTransaction(newTransaction);
-            newBlockchain.distribute();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            bc.nextBlock(b1);
+            System.out.println(b1);
+            bc.distribute();
         }
     }
 }
