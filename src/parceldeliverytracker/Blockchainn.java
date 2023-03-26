@@ -41,17 +41,30 @@ public class Blockchainn {
             System.out.println("chainFile :"+ this.chainFile);
             Blockk genesisBlock = new Blockk(0, new ArrayList<Transaction>(), "0");
             blockDB.add(genesisBlock);
-            persist();
         } else {
             this.chainFile = fileName;
             blockDB = getExistingBlockChain();
+            Blockk lastBlock = blockDB.get(blockDB.size() - 1);
+            Blockk newBlock = new Blockk(lastBlock.getBlockHeader().getIndex() + 1, new ArrayList<Transaction>(), lastBlock.getBlockHeader().getCurrentHash());
+            blockDB.add(newBlock);
         }
 
     }
 
-    public void addTransaction(Transaction txn) {
+    public void addTransaction( ArrayList<Transaction> txnList) {
 // Get the last block in the chain
         Blockk lastBlock = blockDB.get(blockDB.size() - 1);
+
+        while(!txnList.isEmpty()){
+
+            for ( int i= 0; i < MAX_TXN_LIST_SIZE && !txnList.isEmpty(); i++){
+                Transaction transaction = txnList.remove(0);
+                lastBlock.addTransaction(transaction);
+            }
+            lastBlock.genMerkleRoot();
+            blockDB.add(lastBlock);
+            persist();
+        }
 
         // Check if the transaction list in the last block is full
         if (lastBlock.getTransactionsLst().size() == MAX_TXN_LIST_SIZE) {
