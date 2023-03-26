@@ -16,6 +16,12 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
     public ViewDeliveryInfoPage() {
         initComponents();
     }
+    
+    public void searchOrder() throws Exception {
+        String searchOrderID = searchOrderIDInput.getText();
+        
+        ReadBlockChain.getBlockChainTransactions(searchOrderID);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,21 +32,87 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        orderIDTxt = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        searchOrderIDInput = new javax.swing.JTextField();
+        searchButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        resultTextArea = new javax.swing.JTextArea();
+
+        orderIDTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orderIDTxtActionPerformed(evt);
+            }
+        });
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Order ID: ");
+
+        searchOrderIDInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchOrderIDInputActionPerformed(evt);
+            }
+        });
+
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
+        resultTextArea.setColumns(20);
+        resultTextArea.setRows(5);
+        jScrollPane1.setViewportView(resultTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchOrderIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(searchOrderIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void orderIDTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_orderIDTxtActionPerformed
+
+    private void searchOrderIDInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOrderIDInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchOrderIDInputActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        try {
+            searchOrder();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +151,11 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField orderIDTxt;
+    private javax.swing.JTextArea resultTextArea;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField searchOrderIDInput;
     // End of variables declaration//GEN-END:variables
 }

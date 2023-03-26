@@ -13,7 +13,7 @@ public class Blockk implements Serializable{
     public String merkleRoot;
     /* aggregation relationship */
     //public Transaction tranxLst;
-    private ArrayList<Transaction> transactionsLst;
+    private ArrayList<String> transactionsLst = new ArrayList<String>();
 
     public Blockk(int index, String previousHash) {
         long now = System.currentTimeMillis();
@@ -31,11 +31,11 @@ public class Blockk implements Serializable{
         return blockHeader;
     }
 
-    public ArrayList<Transaction> getTransactionsLst() {
+    public ArrayList<String> getTransactionsLst() {
         return transactionsLst;
     }
 
-    public void addTransaction(Transaction txn) {
+    public void addTransaction(String txn) {
         transactionsLst.add(txn);
         this.blockHeader.setMerkleRoot(genMerkleRoot());
     }
@@ -94,9 +94,9 @@ public class Blockk implements Serializable{
         public void setMerkleRoot(String merkleRoot) { this.merkleRoot = merkleRoot;}
     }
     /* aggregation relationship */
-    public ArrayList<Transaction>  tranxLst;
+    public ArrayList<String>  tranxLst;
     //set whole list
-    public void setTranxLst(ArrayList<Transaction> tranxLst) {
+    public void setTranxLst(ArrayList<String> tranxLst) {
         this.tranxLst = tranxLst;
     }
 }

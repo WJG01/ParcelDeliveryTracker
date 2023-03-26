@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Transaction(String orderID, long senderIC, String senderAddress, long recipientIC,
+public record Transaction(String orderID, String senderIC, String senderAddress, String recipientIC,
 						  String recipientAdress) implements Serializable {
 
 	/**
@@ -13,7 +13,7 @@ public record Transaction(String orderID, long senderIC, String senderAddress, l
 	 */
 	private static final long serialVersionUID = -3891440441905013644L;
 
-	public Transaction(String orderID, long senderIC, String senderAddress, long recipientIC, String recipientAdress) {
+	public Transaction(String orderID, String senderIC, String senderAddress, String recipientIC, String recipientAdress) {
 		this.orderID = orderID;
 		this.senderIC = senderIC;
 		this.senderAddress = senderAddress;

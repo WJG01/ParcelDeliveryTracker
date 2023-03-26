@@ -80,18 +80,18 @@ public class Blockchainn {
         blockDB = getExistingBlockChain(this.chainFile);
     }
 
-    public void addTransaction(Blockchainn bc, Transaction txn) {
+    public void addTransaction(Blockchainn bc, String txn) {
 // Get the last block in the chain
 
 
         Blockk lastBlock = blockDB.get(blockDB.size() - 1);
 
         // Check if the transaction list in the last block is full
-        if (lastBlock.getTransactionsLst().size() == MAX_TXN_LIST_SIZE || lastBlock.getBlockHeader().getIndex() == 0) {
+        if (lastBlock.getBlockHeader().getIndex() == 0 || lastBlock.getTransactionsLst().size() == MAX_TXN_LIST_SIZE) {
             // Create a new block with the transaction list and add it to the chain
             Blockk newBlock = new Blockk(lastBlock.getBlockHeader().getIndex() + 1, lastBlock.getBlockHeader().getCurrentHash());
             newBlock.addTransaction(txn);
-            ArrayList<Transaction> transactionLst = newBlock.getTransactionsLst();
+            ArrayList<String> transactionLst = newBlock.getTransactionsLst();
             newBlock.setTranxLst(transactionLst);
             newBlock.getBlockHeader().setIndex(lastBlock.getBlockHeader().getIndex() + 1);
             newBlock.genMerkleRoot();
@@ -101,7 +101,7 @@ public class Blockchainn {
 
         } else {
             // Append the transaction to the transaction list in the last block
-            ArrayList<Transaction> lastBlockTxn = lastBlock.getTransactionsLst();
+            ArrayList<String> lastBlockTxn = lastBlock.getTransactionsLst();
             System.out.println("Existing transaction list: " + lastBlockTxn);
             lastBlockTxn.add(txn);
             lastBlock.setTranxLst(lastBlockTxn);

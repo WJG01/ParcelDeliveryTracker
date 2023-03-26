@@ -6,6 +6,8 @@ package parceldeliverytracker;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * @author weiju
@@ -15,13 +17,24 @@ public class ParcelDeliveryTracker {
     private static final String masterFolder = "master";
     private static final String fileName = masterFolder + "/chain.bin";
 
-    public static void main(String[] args) {
+    public static void insertRecord(String input) throws Exception {
         Blockchainn bc = Blockchainn.getInstance(fileName);
         File folder = new File(masterFolder);
         File file = new File(fileName);
 
-        Transaction newTransaction = new Transaction("O352353", 0123123, "senderAdress", 99453453, "recipientAdress");
+        //create public and private key //show keyPairing
+        MyKeyPair.create();
+        byte[] publicKey = MyKeyPair.getPublicKey().getEncoded();
+        byte[] privateKey = MyKeyPair.getPrivateKey().getEncoded();
 
+        //DIR = MyKeyPair; public file = PublicKey; privateKey = PrivateKey
+        MyKeyPair.put(publicKey, "MyKeyPair/PublicKey");
+        MyKeyPair.put(privateKey, "MyKeyPair/PrivateKey");
+
+        Asymmetric asym = new Asymmetric();
+        PublicKey pubKeyRead = KeyAccess.getPublicKey("MyKeyPair/PublicKey");
+
+        String encrypted = asym.encrypt(input,pubKeyRead);
 
         if (!folder.exists() || !file.exists()) {
             if (!folder.exists()) {
@@ -35,14 +48,14 @@ public class ParcelDeliveryTracker {
                 }
             }
             bc.genesis();
-            bc.addTransaction(bc,newTransaction);
-            bc.distribute();
+            bc.addTransaction(bc, input);
+           // bc.distribute();
         } else {
             bc.fetchPreviousBlock();
-            bc.addTransaction(bc,newTransaction);
-            bc.distribute();
+            bc.addTransaction(bc, input);
+           // bc.distribute();
         }
-
+        ReadBlockChain.getBlockChainTransactions("");
 
 
         //ReadBlockChain.getBlockChainTransactions("master/chain.bin");
