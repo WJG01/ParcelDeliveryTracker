@@ -64,11 +64,16 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
     public void searchOrder() throws Exception {
         String searchOrderID = searchOrderIDInput.getText();
+        System.out.println("Hello");
 
+        ReadBlockChain.getBlockChainTransactions();
         List<String> extractedResult = ReadBlockChain.extractedResult;
+
         for (String record : extractedResult) {
+            System.out.println("This is the record:" + record);
             String[] field = record.split("\\|");
             if (field[0].equals(searchOrderID)) {
+                System.out.println("This is the field" + field[0]);
                 System.out.println("found");
                 Transaction foundTransaction = new Transaction(field[0], field[1], field[2], field[3], field[4]);
                 fillInTextArea(foundTransaction);
@@ -78,10 +83,10 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
     public void fillInTextArea(Transaction transaction) {
         String textToSet = "OrderID :" + transaction.orderID() +
-                "\n Sender IC: " + transaction.senderIC() +
-                "\n Sender Address: " + transaction.senderIC() +
-                "\n Recipient Address: " + transaction.recipientIC() +
-                "\n Recipient Address: " + transaction.recipientAdress();
+                "\n\n Sender IC: " + transaction.senderIC() +
+                "\n\n Sender Address: " + transaction.senderIC() +
+                "\n\n Recipient IC: " + transaction.recipientIC() +
+                "\n\n Recipient Address: " + transaction.recipientAdress();
         resultTextArea.setText(textToSet);
 
     }
