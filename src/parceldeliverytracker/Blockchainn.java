@@ -105,7 +105,7 @@ public class Blockchainn {
             System.out.println("Existing transaction list: " + lastBlockTxn);
             lastBlockTxn.add(txn);
             lastBlock.setTranxLst(lastBlockTxn);
-            //ArrayList<Transaction> transactionLst = lastBlock.getTransactionsLst();
+            //ArrayList<String> transactionLst = lastBlock.getTransactionsLst();
             String merkleRoot = lastBlock.genMerkleRoot();
             lastBlock.getBlockHeader().setMerkleRoot(merkleRoot);
             persist();

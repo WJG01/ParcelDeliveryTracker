@@ -247,15 +247,16 @@ public class CreateNewDeliveryPage extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void createNewTransaction() throws Exception {
-        String orderID = orderIDTxt.getText();
-        String senderIC = senderICTxt.getText();
-        String senderAddress = SenderAdressTxt.getText();
-        String recipientIC = RecipientICTxt.getText();
-        String recipientAddress = RecipientAddressTxt.getText();
+        String orderID = orderIDTxt.getText().trim();
+        String senderIC = senderICTxt.getText().trim();
+        String senderAddress = SenderAdressTxt.getText().trim();
+        String recipientIC = RecipientICTxt.getText().trim();
+        String recipientAddress = RecipientAddressTxt.getText().trim();
 
-        //Transaction newTransaction = new Transaction(orderID, senderIC, senderAddress, recipientIC, recipientAddress);
+        Transaction newTransaction = new Transaction(orderID, senderIC, senderAddress, recipientIC, recipientAddress);
 
-        ParcelDeliveryTracker.insertRecord(orderID + "|"+senderIC+"|"+senderAddress+"|"+recipientIC+"|"+recipientAddress);
+        //NewBlockCreator.insertRecord(orderID + "|"+senderIC+"|"+senderAddress+"|"+recipientIC+"|"+recipientAddress);
+        NewBlockCreator.insertRecord(newTransaction);
         
     }
 }

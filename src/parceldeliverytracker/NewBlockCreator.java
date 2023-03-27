@@ -11,10 +11,18 @@ import java.security.PublicKey;
 /**
  * @author weiju
  */
-public class ParcelDeliveryTracker {
+public class NewBlockCreator {
 
     private static final String masterFolder = "master";
     private static final String fileName = masterFolder + "/chain.bin";
+
+    public static void main(String[] args) {
+        try {
+            insertRecord("testing1|testing2|testing3|testing4|testing5");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     public static void insertRecord(String input) throws Exception {
@@ -22,18 +30,9 @@ public class ParcelDeliveryTracker {
         File folder = new File(masterFolder);
         File file = new File(fileName);
 
-        //create public and private key //show keyPairing
-        MyKeyPair.create();
-        byte[] publicKey = MyKeyPair.getPublicKey().getEncoded();
-        byte[] privateKey = MyKeyPair.getPrivateKey().getEncoded();
-
-        //DIR = MyKeyPair; public file = PublicKey; privateKey = PrivateKey
-        MyKeyPair.put(publicKey, "MyKeyPair/PublicKey");
-        MyKeyPair.put(privateKey, "MyKeyPair/PrivateKey");
 
         Asymmetric asym = new Asymmetric();
         PublicKey pubKeyRead = KeyAccess.getPublicKey("MyKeyPair/PublicKey");
-
         String encrypted = asym.encrypt(input, pubKeyRead);
 
         if (!folder.exists() || !file.exists()) {
@@ -48,12 +47,12 @@ public class ParcelDeliveryTracker {
                 }
             }
             bc.genesis();
-            bc.addTransaction(bc, input);
+            bc.addTransaction(bc, encrypted);
             // bc.distribute();
         } else {
             bc.fetchPreviousBlock();
-            bc.addTransaction(bc, input);
-            // bc.distribute();
+            bc.addTransaction(bc, encrypted);
+            bc.distribute();
         }
         ReadBlockChain.getBlockChainTransactions();
 

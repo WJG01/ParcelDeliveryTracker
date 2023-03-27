@@ -16,6 +16,8 @@ public class ReadBlockChain {
         //bc.distribute();
         blockChainList = bc.getExistingBlockChain(file);
         PrivateKey privKeyRead = KeyAccess.getPrivateKey("MyKeyPair/PrivateKey");
+        Asymmetric asym = new Asymmetric();
+
 
 
         for (int i = 1; i < blockChainList.size(); i++) {
@@ -24,8 +26,9 @@ public class ReadBlockChain {
             for (String transaction : TranxList) {
 //                String[] tranx = transaction.split(",");
 //                String tranxSingle = tranx[0];
-                System.out.println(transaction);
-                extractedResult.add(transaction);
+                String decryptedTransaction =asym.decrypt(transaction, privKeyRead);
+                System.out.println(decryptedTransaction);
+                extractedResult.add(decryptedTransaction);
 
             }
         }

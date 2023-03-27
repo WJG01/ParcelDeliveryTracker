@@ -76,6 +76,7 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
                 System.out.println("This is the field" + field[0]);
                 System.out.println("found");
                 Transaction foundTransaction = new Transaction(field[0], field[1], field[2], field[3], field[4]);
+                //Transaction foundTransaction = record;
                 fillInTextArea(foundTransaction);
             }
         }
