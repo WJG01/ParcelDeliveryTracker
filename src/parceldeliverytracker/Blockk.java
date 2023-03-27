@@ -13,7 +13,7 @@ public class Blockk implements Serializable{
     public String merkleRoot;
     /* aggregation relationship */
     //public Transaction tranxLst;
-    private ArrayList<String> transactionsLst = new ArrayList<String>();
+    //private ArrayList<String> transactionsLst = new ArrayList<String>();
 
     public Blockk(int index, String previousHash) {
         long now = System.currentTimeMillis();
@@ -21,7 +21,7 @@ public class Blockk implements Serializable{
         this.blockHeader = new Header();
         this.blockHeader.setPreviousHash(previousHash);
         this.blockHeader.setTimestamp(now);
-        this.transactionsLst = transactionsLst;
+        //this.transactionsLst = transactionsLst;
         // hashing with sha256 - the input is joined with previousHash+now
         String currentHash = Hasher.sha256(String.join("+", previousHash, String.valueOf(now)));
         this.blockHeader.setCurrentHash(currentHash);
@@ -32,7 +32,7 @@ public class Blockk implements Serializable{
     }
 
     public ArrayList<String> getTransactionsLst() {
-        return transactionsLst;
+        return tranxLst;
     }
 
     public void addTransaction(String txn) {
@@ -94,9 +94,15 @@ public class Blockk implements Serializable{
         public void setMerkleRoot(String merkleRoot) { this.merkleRoot = merkleRoot;}
     }
     /* aggregation relationship */
+    /* aggregation relationship */
+    //public Transaction tranxLst;
     public ArrayList<String>  tranxLst;
     //set whole list
-    public void setTranxLst(ArrayList<String> tranxLst) {
+    public void setTranxLst(Transaction tranxLst) {
         this.tranxLst = tranxLst;
+    }
+    @Override
+    public String toString() {
+        return "Block [blockHeader=" + blockHeader + ", tranxLst=" + tranxLst + "]";
     }
 }

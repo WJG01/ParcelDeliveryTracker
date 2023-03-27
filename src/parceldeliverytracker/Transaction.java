@@ -6,19 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Transaction(String orderID, String senderIC, String senderAddress, String recipientIC,
-						  String recipientAdress) implements Serializable {
+						  String recipientAdress,String sensitiveone, String sensitivetwo) implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3891440441905013644L;
 
-	public Transaction(String orderID, String senderIC, String senderAddress, String recipientIC, String recipientAdress) {
+	public Transaction(String orderID, String senderIC, String senderAddress, String recipientIC, String recipientAdress,String sensitiveone, String sensitivetwo) {
 		this.orderID = orderID;
 		this.senderIC = senderIC;
 		this.senderAddress = senderAddress;
 		this.recipientIC = recipientIC;
 		this.recipientAdress = recipientAdress;
+		this.sensitiveone = sensitiveone;
+		this.sensitivetwo = sensitivetwo;
 	}
 
 	@Override
@@ -48,6 +50,7 @@ public record Transaction(String orderID, String senderIC, String senderAddress,
 
 	@Override
 	public String toString() {
-		return "orderID: "+orderID+" | senderIC: "+senderIC+" | senderAddress: " +senderAddress+" | recipientIC: "+recipientIC+" | recipientAdress: "+recipientAdress;
+		return orderID+"|"+senderIC+"|" +senderAddress+"|"+recipientIC+
+				"|"+recipientAdress+"|"+sensitiveone+"|"+sensitivetwo;
 	}
 }
