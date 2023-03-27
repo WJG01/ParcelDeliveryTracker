@@ -20,31 +20,31 @@ public class NewBlockCreator {
     private static final String fileName = masterFolder + "/chain.bin";
 
     public static void main(String[] args) {
-//        try {
-//            Transaction newTransaction = new Transaction("orderID", "senderIC", "senderAddress",
-//                    " recipientIC", "recipientAddress", "sensitiveone", "sensitivetwo");
-//            digitalSignature(newTransaction);
-//
-//            //insertRecord("testing1|testing2|testing3|testing4|testing5");
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-        Blockchainn bc = Blockchainn.getInstance(fileName);
-        bc.fetchPreviousBlock();
-        bc.distribute();
+        try {
+            DeliveryInfoClass newDeliveryInfo = new DeliveryInfoClass("orderID", "senderIC", "senderAddress",
+                    " recipientIC", "recipientAddress", "sensitiveone", "sensitivetwo");
+            //digitalSignature(newTransaction);
+
+            insertRecord(newDeliveryInfo);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+//        Blockchainn bc = Blockchainn.getInstance(fileName);
+//        bc.fetchPreviousBlock();
+//        bc.distribute();
     }
 
 
-    public static void insertRecord(Transaction input) throws Exception {
+    public static void insertRecord(DeliveryInfoClass newDeliveryInfo) throws Exception {
         Blockchainn bc = Blockchainn.getInstance(fileName);
         File folder = new File(masterFolder);
         File file = new File(fileName);
 
-        digitalSignature(input);
+        digitalSignature(newDeliveryInfo);
 
         Asymmetric asym = new Asymmetric();
         PublicKey pubKeyRead = KeyAccess.getPublicKey("MyKeyPair/PublicKey");
-        String encrypted = asym.encrypt(input.toString(), pubKeyRead);
+        String encrypted = asym.encrypt(newDeliveryInfo.toString(), pubKeyRead);
 
         if (!folder.exists() || !file.exists()) {
             if (!folder.exists()) {
@@ -70,13 +70,13 @@ public class NewBlockCreator {
         //ReadBlockChain.getBlockChainTransactions("master/chain.bin");
     }
 
-    private static void digitalSignature(Transaction input) throws Exception {
+    private static void digitalSignature(DeliveryInfoClass newDeliveryInfo) throws Exception {
 
         MyKeyPair.create();
         PublicKey publicKey = MyKeyPair.getPublicKey();
         PrivateKey privateKey = MyKeyPair.getPrivateKey();
         MySignature sig = new MySignature();
-        String signature = sig.sign(input.toString(), privateKey);
+        String signature = sig.sign(newDeliveryInfo.toString(), privateKey);
 
 
         String privateKeyStr = Base64.getEncoder().encodeToString(privateKey.getEncoded());
@@ -84,7 +84,7 @@ public class NewBlockCreator {
 
 
         FileWriter fileWriter = new FileWriter("DigitalSignatureKeyStore/digitalSignature.txt");
-        String content = input.toString() + "," + signature + "," + privateKeyStr + "," + publicKeyStr;
+        String content = newDeliveryInfo.toString() + "," + signature + "," + privateKeyStr + "," + publicKeyStr;
         fileWriter.write(content);
         fileWriter.close();
 

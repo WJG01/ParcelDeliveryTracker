@@ -21,7 +21,7 @@ public class ReadBlockChain {
 
 
         for (int i = 1; i < blockChainList.size(); i++) {
-            List<String> TranxList = blockChainList.get(i).getTransactionsLst();
+            List<String> TranxList = blockChainList.get(i).getTransaction().getTransactionsLst();
 
             for (String transaction : TranxList) {
 //                String[] tranx = transaction.split(",");

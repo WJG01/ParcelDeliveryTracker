@@ -1,56 +1,36 @@
 package parceldeliverytracker;
 
-//binary form
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Transaction(String orderID, String senderIC, String senderAddress, String recipientIC,
-						  String recipientAdress,String sensitiveone, String sensitivetwo) implements Serializable {
+public class Transaction implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3891440441905013644L;
+    public final int SIZE = 10;
 
-	public Transaction(String orderID, String senderIC, String senderAddress, String recipientIC, String recipientAdress,String sensitiveone, String sensitivetwo) {
-		this.orderID = orderID;
-		this.senderIC = senderIC;
-		this.senderAddress = senderAddress;
-		this.recipientIC = recipientIC;
-		this.recipientAdress = recipientAdress;
-		this.sensitiveone = sensitiveone;
-		this.sensitivetwo = sensitivetwo;
-	}
+    //public String merkleRoot ;
 
-	@Override
-	public String orderID() {
-		return orderID;
-	}
+    public List<String> dataLst = new ArrayList<>();
 
-	@Override
-	public String senderIC() {
-		return senderIC;
-	}
+    public void add(String tranx) {
+        if (dataLst.size() < SIZE) {
+            dataLst.add(tranx);
+        }
+        //genMerkleRoot();
+    }
 
-	@Override
-	public String senderAddress() {
-		return senderAddress;
-	}
+    public List<String> getTransactionsLst() {
+        return this.dataLst;
+    }
 
-	@Override
-	public String recipientIC() {
-		return recipientIC;
-	}
+    public String genMerkleRoot() {
+        MerkleTree mt = MerkleTree.getInstance(this.dataLst);
+        mt.build();
+        return mt.getRoot();
+    }
 
-	@Override
-	public String recipientAdress() {
-		return recipientAdress;
-	}
-
-	@Override
-	public String toString() {
-		return orderID+"|"+senderIC+"|" +senderAddress+"|"+recipientIC+
-				"|"+recipientAdress+"|"+sensitiveone+"|"+sensitivetwo;
-	}
+    @Override
+    public String toString() {
+        return "Transaction [SIZE=" + SIZE + ", dataLst=" + dataLst + "]";
+    }
 }

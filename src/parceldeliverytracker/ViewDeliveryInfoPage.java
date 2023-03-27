@@ -75,19 +75,19 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
             if (field[0].equals(searchOrderID)) {
                 System.out.println("This is the field" + field[0]);
                 System.out.println("found");
-                Transaction foundTransaction = new Transaction(field[0], field[1], field[2], field[3], field[4],field[5],field[6]);
+                DeliveryInfoClass foundDeliveryInfo = new DeliveryInfoClass(field[0], field[1], field[2], field[3], field[4],field[5],field[6]);
                 //Transaction foundTransaction = record;
-                fillInTextArea(foundTransaction);
+                fillInTextArea(foundDeliveryInfo);
             }
         }
     }
 
-    public void fillInTextArea(Transaction transaction) {
-        String textToSet = "OrderID :" + transaction.orderID() +
-                "\n\n Sender IC: " + transaction.senderIC() +
-                "\n\n Sender Address: " + transaction.senderIC() +
-                "\n\n Recipient IC: " + transaction.recipientIC() +
-                "\n\n Recipient Address: " + transaction.recipientAdress();
+    public void fillInTextArea(DeliveryInfoClass deliveryInfoClass) {
+        String textToSet = "OrderID :" + deliveryInfoClass.orderID() +
+                "\n\n Sender IC: " + deliveryInfoClass.senderIC() +
+                "\n\n Sender Address: " + deliveryInfoClass.senderIC() +
+                "\n\n Recipient IC: " + deliveryInfoClass.recipientIC() +
+                "\n\n Recipient Address: " + deliveryInfoClass.recipientAdress();
         resultTextArea.setText(textToSet);
 
     }

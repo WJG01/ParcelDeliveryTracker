@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Blockchainn {
     public static final int MAX_TXN_LIST_SIZE = 10;
@@ -82,34 +83,50 @@ public class Blockchainn {
 
     public void addTransaction(Blockchainn bc, String txn) {
 // Get the last block in the chain
+        List<String> lastBlockTransactionLst = new ArrayList<>();
+        Transaction lastBlockTransaction = new Transaction();
 
 
         Blockk lastBlock = blockDB.get(blockDB.size() - 1);
+        int lastBlockIndex = lastBlock.getBlockHeader().getIndex();
 
-        // Check if the transaction list in the last block is full
-        if (lastBlock.getBlockHeader().getIndex() == 0 || lastBlock.getTransactionsLst().size() == MAX_TXN_LIST_SIZE) {
+        if (lastBlockIndex != 0) {
+            lastBlockTransaction = lastBlock.getTransaction();
+            lastBlockTransactionLst = lastBlockTransaction.getTransactionsLst();
+        }
+
+
+        // Check if the transaction list in the last block is full / last block is genesis block
+        if (lastBlockIndex == 0 || lastBlockTransactionLst.size() == MAX_TXN_LIST_SIZE) {
             // Create a new block with the transaction list and add it to the chain
             Blockk newBlock = new Blockk(lastBlock.getBlockHeader().getIndex() + 1, lastBlock.getBlockHeader().getCurrentHash());
-            newBlock.addTransaction(txn);
-            ArrayList<String> transactionLst = newBlock.getTransactionsLst();
-            newBlock.setTranxLst(transactionLst);
-            newBlock.getBlockHeader().setIndex(lastBlock.getBlockHeader().getIndex() + 1);
-            newBlock.genMerkleRoot();
+            //newBlock.getBlockHeader().setIndex(lastBlock.getBlockHeader().getIndex() + 1);
+
+            Transaction tranxLst = new Transaction();
+            tranxLst.add(txn);
+            newBlock.setTranxLst(tranxLst);
+            String merkleRoot = tranxLst.genMerkleRoot();
+            newBlock.getBlockHeader().setMerkleRoot(merkleRoot);
+
+            //newBlock.addTransaction(txn);
+//            Transaction transactionLst = newBlock.getTransactionsLst();
+//            newBlock.setTranxLst(transactionLst);
+
             //System.out.println(newBlock.toString());
             blockDB.add(newBlock);
-            persist();
 
         } else {
             // Append the transaction to the transaction list in the last block
-            ArrayList<String> lastBlockTxn = lastBlock.getTransactionsLst();
-            System.out.println("Existing transaction list: " + lastBlockTxn);
-            lastBlockTxn.add(txn);
-            lastBlock.setTranxLst(lastBlockTxn);
+            //Transaction lastBlockTxn = lastBlock.getTransactionsLst();
+            System.out.println("Existing transaction list: " + lastBlockTransaction);
+            lastBlockTransaction.add(txn);
+            lastBlock.setTranxLst(lastBlockTransaction);
+            String merkleRoot = lastBlockTransaction.genMerkleRoot();
             //ArrayList<String> transactionLst = lastBlock.getTransactionsLst();
-            String merkleRoot = lastBlock.genMerkleRoot();
+            //String merkleRoot = lastBlock.genMerkleRoot();
             lastBlock.getBlockHeader().setMerkleRoot(merkleRoot);
-            persist();
         }
+        persist();
     }
 
     /**

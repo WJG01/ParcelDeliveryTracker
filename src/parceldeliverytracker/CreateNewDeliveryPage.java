@@ -253,10 +253,10 @@ public class CreateNewDeliveryPage extends javax.swing.JFrame {
         String sensitiveone = "Sensitive one";
         String sensitivetwo = "Sensitive two";
 
-        Transaction newTransaction = new Transaction(orderID, senderIC, senderAddress, recipientIC, recipientAddress,sensitiveone,sensitivetwo);
+        DeliveryInfoClass newDeliveryInfo = new DeliveryInfoClass(orderID, senderIC, senderAddress, recipientIC, recipientAddress,sensitiveone,sensitivetwo);
 
         //NewBlockCreator.insertRecord(orderID + "|" + senderIC + "|" + senderAddress + "|" + recipientIC + "|" + recipientAddress+"|"+sensitiveone+"|"+sensitivetwo);
-        NewBlockCreator.insertRecord(newTransaction);
+        NewBlockCreator.insertRecord(newDeliveryInfo);
 
     }
 }
