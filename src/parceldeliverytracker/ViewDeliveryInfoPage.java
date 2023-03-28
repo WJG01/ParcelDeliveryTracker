@@ -141,19 +141,15 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
             return;
         }
 
-        System.out.println("Hello");
-
-        ReadBlockChain.getBlockChainTransactions();
-        List<String> extractedResult = ReadBlockChain.extractedResult;
+        BlockReader.getBlockChainTransactions();
+        List<String> extractedResult = BlockReader.extractedResult;
 
         //String foundRecordBlockChain = "";
 
         for (String record : extractedResult) {
-            System.out.println("This is the record:" + record);
+            System.out.println("Record found :" + record);
             String[] field = record.split("\\|");
             if (field[0].equals(searchTrackingID) && field[6].equals(inputRecipientIC)) {
-                System.out.println("This is the field" + field[0]);
-                System.out.println("found");
                 //foundRecordBlockChain = record;
                 foundDeliveryInfo = new DeliveryInfoClass(field[0], field[1], field[2], field[3], field[4], field[5], field[6], field[7], field[8], field[9]);
 
@@ -183,7 +179,6 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
 
         });
-        System.out.println("Result is :" + isValid.get());
 
         if (foundDeliveryInfo != null) {
 

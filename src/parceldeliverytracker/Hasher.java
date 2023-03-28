@@ -52,8 +52,7 @@ public class Hasher {
 			
 			//digest the input byte arr
 			byte[] hashBytes = md.digest();
-			System.out.println(hashBytes);			
-			
+
 			//convert hashBytes to String(Base64)
 			hashCode = Base64.getEncoder().encodeToString(hashBytes);
 			
@@ -84,8 +83,6 @@ public class Hasher {
 			
 			//digest the input byte arr
 			byte[] hashBytes = md.digest();
-			System.out.println(hashBytes);			
-			
 			//convert hashBytes to String(Base64)
 			hashCode = Base64.getEncoder().encodeToString(hashBytes);
 			

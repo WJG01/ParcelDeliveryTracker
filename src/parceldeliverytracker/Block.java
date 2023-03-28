@@ -2,49 +2,21 @@ package parceldeliverytracker;
 
 import java.io.Serializable;
 
-public class Blockk implements Serializable {
-    /**
-     *
-     */
+public class Block implements Serializable {
     private static final long serialVersionUID = -1911051056455957018L;
 
     public Header blockHeader;
-    //public String merkleRoot;
-    /* aggregation relationship */
-    //public Transaction tranxLst;
-    //private ArrayList<String> transactionsLst = new ArrayList<String>();
-    /* aggregation relationship */
-    /* aggregation relationship */
-    //public Transaction tranxLst;
+
     public Transaction tranxLst;
 
-//    public ArrayList<String> getTransactionsLst() {
-//        return tranxLst;
-//    }
-//
-//    public void addTransaction(String txn) {
-//        transactionsLst.add(txn);
-//        this.blockHeader.setMerkleRoot(genMerkleRoot());
-//    }
-//
-//
-//
-//    public String genMerkleRoot() {
-//        MerkleTree mt = MerkleTree.getInstance(this.transactionsLst);
-//        mt.build();
-//        return mt.getRoot();
-//    }
 
-    public Blockk(int index, String previousHash) {
+    public Block(int index, String previousHash) {
         long now = System.currentTimeMillis();
         /* construct part object upon object construction */
         this.blockHeader = new Header();
         this.blockHeader.setPreviousHash(previousHash);
         this.blockHeader.setTimestamp(now);
         this.blockHeader.setIndex(index);
-        //this.tranxLst = tranxLst;
-        // hashing with sha256 - the input is joined with previousHash+now+generated merkle root
-
     }
 
     public Header getBlockHeader() {
@@ -87,20 +59,12 @@ public class Blockk implements Serializable {
         public void setCurrentHash(String merkleRoot) {
             // hashing with sha256 - the input is joined with previousHash+now+generated merkle root
             long now = System.currentTimeMillis();
-            String currentHash = Hasher.sha256(String.join("+", previousHash, String.valueOf(now),merkleRoot));
+            String currentHash = Hasher.sha256(String.join("+", previousHash, String.valueOf(now), merkleRoot));
             this.currentHash = currentHash;
-        }
-
-        public String getPreviousHash() {
-            return previousHash;
         }
 
         public void setPreviousHash(String previousHash) {
             this.previousHash = previousHash;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
         }
 
         public void setTimestamp(long timestamp) {

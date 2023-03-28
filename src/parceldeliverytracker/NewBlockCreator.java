@@ -8,12 +8,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.stream.Stream;
 
 /**
  * @author weiju
@@ -23,33 +20,16 @@ public class NewBlockCreator {
     private static final String masterFolder = "master";
     private static final String fileName = masterFolder + "/chain.bin";
 
-    public static void main(String[] args) {
-//        try {
-//            //digitalSignature(newTransaction);
-//
-//            insertRecord(newDeliveryInfo);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        Blockchainn bc = Blockchainn.getInstance(fileName);
-//        bc.fetchPreviousBlock();
-//        bc.distribute();
-//        try {
-//            digitalSignature(newDeliveryInfo);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-    }
-
 
     public static void insertRecord(DeliveryInfoClass newDeliveryInfo) throws Exception {
-        Blockchainn bc = Blockchainn.getInstance(fileName);
+        Blockchain bc = Blockchain.getInstance(fileName);
         File folder = new File(masterFolder);
         File file = new File(fileName);
 
+        //create digital signature for significant data
         digitalSignature(newDeliveryInfo);
 
-        Asymmetric asym = new Asymmetric();
+        AsymmetricEncrypt asym = new AsymmetricEncrypt();
         PublicKey pubKeyRead = KeyAccess.getPublicKey("MyKeyPair/PublicKey");
         String encrypted = asym.encrypt(newDeliveryInfo.toString(), pubKeyRead);
 
@@ -66,15 +46,12 @@ public class NewBlockCreator {
             }
             bc.genesis();
             bc.addTransaction(bc, encrypted);
-            bc.distribute();
         } else {
             bc.fetchPreviousBlock();
             bc.addTransaction(bc, encrypted);
-            bc.distribute();
         }
-        ReadBlockChain.getBlockChainTransactions();
-
-        //ReadBlockChain.getBlockChainTransactions("master/chain.bin");
+        //Showing blockchain structure after adding record
+        bc.distribute();
     }
 
     private static void digitalSignature(DeliveryInfoClass newDeliveryInfo) throws Exception {
@@ -101,7 +78,6 @@ public class NewBlockCreator {
         }
 
         String contentToWrite = String.join(",", newDeliveryInfo.trackingID(), newDeliveryInfo.toString(), signature, privateKeyStr, publicKeyStr);
-                //newDeliveryInfo + "," + signature + "," + privateKeyStr + "," + publicKeyStr;
         FileHandler.writeFile(filePath, contentToWrite);
     }
 }

@@ -442,16 +442,16 @@ public class CreateNewDeliveryPage extends javax.swing.JFrame {
         DeliveryInfoClass newDeliveryInfo = new DeliveryInfoClass(trackingID, orderID, senderName, senderPhone, senderAddress,
                 recipientName, recipientIC, recipientPhone, recipientAddress, parcelContent);
 
+        //add significant data into blockchain
         NewBlockCreator.insertRecord(newDeliveryInfo);
 
+        //add insignificant data into text file
         Path filePath = Paths.get("insignificantData.txt");
         String stringToWrite = String.join(",", trackingID, courierNumber, shipOutDate, deliverByDate, parcelWeight);
         FileHandler.writeFile(filePath, stringToWrite);
 
         JOptionPane.showMessageDialog(null, "New Delivery Info created successfully");
         clearAllTextBox();
-
-        //NewBlockCreator.insertRecord(orderID + "|" + senderIC + "|" + senderAddress + "|" + recipientIC + "|" + recipientAddress+"|"+sensitiveone+"|"+sensitivetwo);
 
     }
 

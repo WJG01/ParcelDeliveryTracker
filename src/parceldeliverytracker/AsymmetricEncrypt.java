@@ -5,12 +5,12 @@ import java.util.Base64;
 
 import javax.crypto.Cipher;
 
-public class Asymmetric {
+public class AsymmetricEncrypt {
 	/* Cipher object is used to facilitates the operations */
 	private Cipher cipher;
 
 	/* constructor */
-	public Asymmetric(String algorithm) {
+	public AsymmetricEncrypt(String algorithm) {
 		try {
 			cipher = Cipher.getInstance(algorithm);
 		} catch (Exception e) {
@@ -18,7 +18,7 @@ public class Asymmetric {
 		}
 	}
 
-	public Asymmetric() {
+	public AsymmetricEncrypt() {
 		this("RSA"); // calls the constructor by matching the input-args list
 	}
 
