@@ -8,6 +8,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
@@ -17,7 +23,7 @@ import java.util.stream.Stream;
  */
 public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
-    DeliveryInfoClass foundDeliveryInfo;
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonVerify;
@@ -109,15 +115,15 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
         String overviewText =
                 basicInfoTitle +
-                trackingId +
-                "\n\n\n" +
-                courierNumber +
-                "\n\n\n" +
-                shipOutDate +
-                "\n\n\n" +
-                deliverDate +
-                "\n\n\n" +
-                parcelWeight;
+                        trackingId +
+                        "\n\n\n" +
+                        courierNumber +
+                        "\n\n\n" +
+                        shipOutDate +
+                        "\n\n\n" +
+                        deliverDate +
+                        "\n\n\n" +
+                        parcelWeight;
 
         // set the font to a fixed width font
         resultTextArea.setFont(new Font("Courier New", Font.PLAIN, 12));
@@ -127,9 +133,10 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
     public void verifyDelivery(String inputRecipientIC) throws Exception {
 
-        String searchOrderID = searchOrderIDInput.getText();
+        String searchTrackingID = searchOrderIDInput.getText();
+        DeliveryInfoClass foundDeliveryInfo = null;
 
-        if (searchOrderID.isEmpty()) {
+        if (searchTrackingID.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please first search with your tracking ID before verifying", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -139,22 +146,70 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
         ReadBlockChain.getBlockChainTransactions();
         List<String> extractedResult = ReadBlockChain.extractedResult;
 
+        //String foundRecordBlockChain = "";
+
         for (String record : extractedResult) {
             System.out.println("This is the record:" + record);
             String[] field = record.split("\\|");
-            if (field[0].equals(searchOrderID) && field[6].equals(inputRecipientIC)) {
+            if (field[0].equals(searchTrackingID) && field[6].equals(inputRecipientIC)) {
                 System.out.println("This is the field" + field[0]);
                 System.out.println("found");
+                //foundRecordBlockChain = record;
                 foundDeliveryInfo = new DeliveryInfoClass(field[0], field[1], field[2], field[3], field[4], field[5], field[6], field[7], field[8], field[9]);
 
             }
         }
 
-        showConfidentialDialog(foundDeliveryInfo);
+
+        MySignature sig = new MySignature();
+        Path filePath = Paths.get("DigitalSignatureKeyStore/digitalSignature.txt");
+        Stream<String> digitalSignatureRecords = FileHandler.readLines(filePath);
+
+        AtomicBoolean isValid = new AtomicBoolean(false);
+
+        digitalSignatureRecords.forEach(line -> {
+            String[] fields = line.split(",");
+            String trackingID = fields[0];
+
+            if (trackingID.equals(searchTrackingID)) {
+                try {
+                    PublicKey publicKeyRead = convertStringToPublicKey(fields[4]);
+                    //set isValid to true if match
+                    isValid.set(sig.verify(fields[1], fields[2], publicKeyRead));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+
+        });
+        System.out.println("Result is :" + isValid.get());
+
+        if (foundDeliveryInfo != null) {
+
+            if (isValid.get()) {
+                showConfidentialDialog(foundDeliveryInfo);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Verification failed with IC number", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Does not match any record from blockchain", "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
     }
 
+    public PublicKey convertStringToPublicKey(String publicKeyStr) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyStr);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+        return keyFactory.generatePublic(keySpec);
+    }
+
     public void showConfidentialDialog(DeliveryInfoClass foundDeliveryInfo) {
+
+        //if (foundDeliveryInfo = null)
+
         String[] columnNames = {"Field", "Information"};
         Object[][] data = {
                 {"Tracking ID", foundDeliveryInfo.trackingID()},

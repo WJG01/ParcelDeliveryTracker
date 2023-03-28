@@ -43,9 +43,8 @@ public class Blockk implements Serializable {
         this.blockHeader.setTimestamp(now);
         this.blockHeader.setIndex(index);
         //this.tranxLst = tranxLst;
-        // hashing with sha256 - the input is joined with previousHash+now
-        String currentHash = Hasher.sha256(String.join("+", previousHash, String.valueOf(now)));
-        this.blockHeader.setCurrentHash(currentHash);
+        // hashing with sha256 - the input is joined with previousHash+now+generated merkle root
+
     }
 
     public Header getBlockHeader() {
@@ -85,7 +84,10 @@ public class Blockk implements Serializable {
             return currentHash;
         }
 
-        public void setCurrentHash(String currentHash) {
+        public void setCurrentHash(String merkleRoot) {
+            // hashing with sha256 - the input is joined with previousHash+now+generated merkle root
+            long now = System.currentTimeMillis();
+            String currentHash = Hasher.sha256(String.join("+", previousHash, String.valueOf(now),merkleRoot));
             this.currentHash = currentHash;
         }
 

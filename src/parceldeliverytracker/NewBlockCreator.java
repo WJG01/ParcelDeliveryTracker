@@ -5,11 +5,15 @@
 package parceldeliverytracker;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.stream.Stream;
 
 /**
  * @author weiju
@@ -85,32 +89,20 @@ public class NewBlockCreator {
         String privateKeyStr = Base64.getEncoder().encodeToString(privateKey.getEncoded());
         String publicKeyStr = Base64.getEncoder().encodeToString(publicKey.getEncoded());
 
+        Path directoryPath = Paths.get("DigitalSignatureKeyStore");
+        Path filePath = Paths.get("DigitalSignatureKeyStore/digitalSignature.txt");
 
-        FileWriter fileWriter = new FileWriter("DigitalSignatureKeyStore/digitalSignature.txt");
-        String content = newDeliveryInfo + "," + signature + "," + privateKeyStr + "," + publicKeyStr;
-        fileWriter.write(content);
-        fileWriter.close();
+        if (!Files.exists(directoryPath)) {
+            Files.createDirectories(directoryPath);
+        }
 
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("DigitalSignatureKeyStore/digitalSignature.txt"));
-        String readContent = bufferedReader.readLine();
-        String[] field = readContent.split(",");
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
+        }
 
-
-        String publicKeystring = field[3];
-
-
-        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeystring);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-        PublicKey publicKeyread = keyFactory.generatePublic(keySpec);
-
-        //System.out.println("Public key: " + publicKey);
-        boolean isValid = sig.verify(field[0], field[1], publicKeyread);
-        System.out.println("Result:" + isValid);
-
-        bufferedReader.close();
-
-
+        String contentToWrite = String.join(",", newDeliveryInfo.trackingID(), newDeliveryInfo.toString(), signature, privateKeyStr, publicKeyStr);
+                //newDeliveryInfo + "," + signature + "," + privateKeyStr + "," + publicKeyStr;
+        FileHandler.writeFile(filePath, contentToWrite);
     }
 }
 

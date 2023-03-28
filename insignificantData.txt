@@ -1,6 +1,4 @@
-T000001,CAN000001,12-12-2023,01-1-2024,23kg
-T000001,CAN000001,12-12-2023,01-1-2024,23kg
-T0001,CAN000001,12-12-2023,12-1-2024,35kg
-testingtrackingID,testing courier,testing shipout date,testing deliver by date,testing parcel weight
-12345,erwtwr,12-23-30,23-39-30,12kg
-unique,unique,unique,unique,unique
+T00001,CAN00001,23-09-2022,27-09-2022,23kg
+T000002,CAN034583458,12-05-2023,16-05-2023,35kg
+T000003,CAN04756378,12-08-2023,12-03-2023,24kg
+testingtrackingid,testingcourieraccountnumber,testingshipoutdate,testingdeliverbydate,testingparcelweight

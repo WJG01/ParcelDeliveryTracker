@@ -107,6 +107,7 @@ public class Blockchainn {
             newBlock.setTranxLst(tranxLst);
             String merkleRoot = tranxLst.genMerkleRoot();
             newBlock.getBlockHeader().setMerkleRoot(merkleRoot);
+            newBlock.getBlockHeader().setCurrentHash(merkleRoot);
 
             //newBlock.addTransaction(txn);
 //            Transaction transactionLst = newBlock.getTransactionsLst();
@@ -118,13 +119,14 @@ public class Blockchainn {
         } else {
             // Append the transaction to the transaction list in the last block
             //Transaction lastBlockTxn = lastBlock.getTransactionsLst();
-            System.out.println("Existing transaction list: " + lastBlockTransaction);
+            //System.out.println("Existing transaction list: " + lastBlockTransaction);
             lastBlockTransaction.add(txn);
             lastBlock.setTranxLst(lastBlockTransaction);
             String merkleRoot = lastBlockTransaction.genMerkleRoot();
             //ArrayList<String> transactionLst = lastBlock.getTransactionsLst();
             //String merkleRoot = lastBlock.genMerkleRoot();
             lastBlock.getBlockHeader().setMerkleRoot(merkleRoot);
+            lastBlock.getBlockHeader().setCurrentHash(merkleRoot);
         }
         persist();
     }
@@ -136,7 +138,7 @@ public class Blockchainn {
         try (FileOutputStream fout = new FileOutputStream(this.chainFile);
              ObjectOutputStream out = new ObjectOutputStream(fout);
         ) {
-            System.out.println("Writing data: " + blockDB);
+            //System.out.println("Writing data: " + blockDB);
             out.writeObject(blockDB);
             System.out.println(">> Master file is updated!");
         } catch (Exception e) {
