@@ -1,56 +1,73 @@
 package parceldeliverytracker;
 
 //binary form
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-public record DeliveryInfoClass(String orderID, String senderIC, String senderAddress, String recipientIC,
-						  String recipientAdress,String sensitiveone, String sensitivetwo) implements Serializable {
+public record DeliveryInfoClass(String trackingID, String orderID, String senderName, String senderPhone,
+                                String senderAddress,
+                                String recipientName, String recipientIC, String recipientPhone,
+                                String recipientAddress,String parcelContent) implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3891440441905013644L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -3891440441905013644L;
 
-	public DeliveryInfoClass(String orderID, String senderIC, String senderAddress, String recipientIC, String recipientAdress,String sensitiveone, String sensitivetwo) {
-		this.orderID = orderID;
-		this.senderIC = senderIC;
-		this.senderAddress = senderAddress;
-		this.recipientIC = recipientIC;
-		this.recipientAdress = recipientAdress;
-		this.sensitiveone = sensitiveone;
-		this.sensitivetwo = sensitivetwo;
-	}
+    @Override
+    public String trackingID() {
+        return trackingID;
+    }
 
-	@Override
-	public String orderID() {
-		return orderID;
-	}
+    @Override
+    public String orderID() {
+        return orderID;
+    }
 
-	@Override
-	public String senderIC() {
-		return senderIC;
-	}
+    @Override
+    public String parcelContent() {
+        return parcelContent;
+    }
 
-	@Override
-	public String senderAddress() {
-		return senderAddress;
-	}
+    @Override
+    public String senderName() {
+        return senderName;
+    }
 
-	@Override
-	public String recipientIC() {
-		return recipientIC;
-	}
+    @Override
+    public String senderPhone() {
+        return senderPhone;
+    }
 
-	@Override
-	public String recipientAdress() {
-		return recipientAdress;
-	}
+    @Override
+    public String senderAddress() {
+        return senderAddress;
+    }
 
-	@Override
-	public String toString() {
-		return orderID+"|"+senderIC+"|" +senderAddress+"|"+recipientIC+
-				"|"+recipientAdress+"|"+sensitiveone+"|"+sensitivetwo;
-	}
+    @Override
+    public String recipientName() {
+        return recipientName;
+    }
+
+    @Override
+    public String recipientIC() {
+        return recipientIC;
+    }
+
+    @Override
+    public String recipientPhone() {
+        return recipientPhone;
+    }
+
+    @Override
+    public String recipientAddress() {
+        return recipientAddress;
+    }
+
+    @Override
+    public String toString() {
+        return trackingID + "|" + orderID + "|" + senderName + "|" + senderPhone + "|" + senderAddress + "|" + recipientName + "|" + recipientIC + "|" +
+				recipientPhone + "|" + recipientAddress+ "|" + parcelContent;
+
+    }
 }

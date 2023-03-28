@@ -1,0 +1,6 @@
+T000001,CAN000001,12-12-2023,01-1-2024,23kg
+T000001,CAN000001,12-12-2023,01-1-2024,23kg
+T0001,CAN000001,12-12-2023,12-1-2024,35kg
+testingtrackingID,testing courier,testing shipout date,testing deliver by date,testing parcel weight
+12345,erwtwr,12-23-30,23-39-30,12kg
+unique,unique,unique,unique,unique

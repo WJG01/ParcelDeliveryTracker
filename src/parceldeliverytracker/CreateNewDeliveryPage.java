@@ -4,24 +4,51 @@
  */
 package parceldeliverytracker;
 
+import javax.swing.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * @author weiju
  */
 public class CreateNewDeliveryPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField RecipientAddressTxt;
-    private javax.swing.JTextField RecipientICTxt;
+    private javax.swing.JTextField DeliverByTxt;
     private javax.swing.JTextField SenderAdressTxt;
+    private javax.swing.JTextField courierTxt;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField orderIDTxt;
-    private javax.swing.JTextField senderICTxt;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField orderIDTxt1;
+    private javax.swing.JTextField parcelContentTxt;
+    private javax.swing.JTextField recipientAddressTxt;
+    private javax.swing.JTextField recipientICTxt;
+    private javax.swing.JTextField recipientNameTxt;
+    private javax.swing.JTextField recipientPhoneTxt;
+    private javax.swing.JTextField senderNametxt;
+    private javax.swing.JTextField senderPhoneTxt;
+    private javax.swing.JTextField shipOutTxt;
+    private javax.swing.JTextField trackingIDTxt;
+    private javax.swing.JTextField weightTxt;
+
     /**
      * Creates new form CreateNewDelivery
      */
@@ -56,6 +83,12 @@ public class CreateNewDeliveryPage extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -76,18 +109,46 @@ public class CreateNewDeliveryPage extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        DeliverByTxt = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        orderIDTxt1 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        weightTxt = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        senderPhoneTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        senderICTxt = new javax.swing.JTextField();
-        orderIDTxt = new javax.swing.JTextField();
+        senderNametxt = new javax.swing.JTextField();
+        recipientPhoneTxt = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        parcelContentTxt = new javax.swing.JTextField();
+        recipientAddressTxt = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        trackingIDTxt = new javax.swing.JTextField();
         SenderAdressTxt = new javax.swing.JTextField();
-        RecipientAddressTxt = new javax.swing.JTextField();
-        RecipientICTxt = new javax.swing.JTextField();
+        courierTxt = new javax.swing.JTextField();
+        shipOutTxt = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        recipientNameTxt = new javax.swing.JTextField();
+        recipientICTxt = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Parcel Delivery Tracker");
+        setBackground(new java.awt.Color(204, 255, 204));
+        setMaximumSize(new java.awt.Dimension(519, 471));
+        setMinimumSize(new java.awt.Dimension(519, 471));
+        setPreferredSize(new java.awt.Dimension(519, 471));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setText("Create");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -95,168 +156,319 @@ public class CreateNewDeliveryPage extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 380, 94, 36));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("New Delivery Record");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(277, 56, 186, -1));
 
-        jLabel2.setText("Sender IC:");
+        DeliverByTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeliverByTxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(DeliverByTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 153, -1));
 
-        jLabel3.setText("Order ID: ");
+        jLabel9.setText("Tracking ID :");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 142, -1));
+
+        orderIDTxt1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orderIDTxt1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(orderIDTxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, 153, -1));
+
+        jLabel10.setText("Courier Account Number :");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 142, -1));
+
+        weightTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                weightTxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(weightTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 290, 153, -1));
+
+        jLabel11.setText("ShipOut Date :");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 142, -1));
+
+        senderPhoneTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                senderPhoneTxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(senderPhoneTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 150, 153, -1));
+
+        jLabel3.setText("Sender Name :");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 110, 114, -1));
+
+        jLabel7.setText("Recipient IC :");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 260, 114, -1));
+
+        jLabel6.setText("Recipient Phone:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, -1, -1));
+
+        senderNametxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                senderNametxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(senderNametxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 110, 153, -1));
+
+        recipientPhoneTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recipientPhoneTxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(recipientPhoneTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 290, 153, -1));
 
         jLabel4.setText("Sender Address:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, 114, 17));
 
-        jLabel5.setText("Recipient IC:");
-
-        jLabel6.setText("Recipient Adresss:");
-
-        senderICTxt.addActionListener(new java.awt.event.ActionListener() {
+        parcelContentTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                senderICTxtActionPerformed(evt);
+                parcelContentTxtActionPerformed(evt);
             }
         });
+        getContentPane().add(parcelContentTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, 153, -1));
 
-        orderIDTxt.addActionListener(new java.awt.event.ActionListener() {
+        recipientAddressTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                orderIDTxtActionPerformed(evt);
+                recipientAddressTxtActionPerformed(evt);
             }
         });
+        getContentPane().add(recipientAddressTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 330, 153, -1));
+
+        jLabel12.setText("DeliverBy Date :");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 142, 17));
+
+        jLabel5.setText("Recipient Name:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 230, 102, -1));
+
+        jLabel13.setText("Order ID :");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 107, -1));
+
+        jLabel14.setText("Parcel Weight :");
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
+
+        jLabel8.setText("Recipient Adresss:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 330, 114, 25));
+
+        jLabel15.setText("Parcel Content :");
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, 142, -1));
+
+        jLabel2.setText("Sender Phone:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 150, 114, -1));
+
+        trackingIDTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                trackingIDTxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(trackingIDTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 153, -1));
 
         SenderAdressTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SenderAdressTxtActionPerformed(evt);
             }
         });
+        getContentPane().add(SenderAdressTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 153, -1));
 
-        RecipientAddressTxt.addActionListener(new java.awt.event.ActionListener() {
+        courierTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RecipientAddressTxtActionPerformed(evt);
+                courierTxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(courierTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 153, -1));
+
+        shipOutTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                shipOutTxtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(shipOutTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 153, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        recipientNameTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recipientNameTxtActionPerformed(evt);
             }
         });
 
-        RecipientICTxt.addActionListener(new java.awt.event.ActionListener() {
+        recipientICTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RecipientICTxtActionPerformed(evt);
+                recipientICTxtActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(168, 168, 168)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jButton1)
-                                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(56, 56, 56)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(65, 65, 65)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(RecipientAddressTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(SenderAdressTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(senderICTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(RecipientICTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addComponent(jLabel6)
-                                                                .addGap(251, 251, 251))
-                                                        .addComponent(orderIDTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addContainerGap(105, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGap(62, 62, 62)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(366, Short.MAX_VALUE)))
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(498, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(recipientICTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(recipientNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(19, 19, 19))
         );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(jLabel1)
-                                .addGap(50, 50, 50)
-                                .addComponent(orderIDTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel1Layout.setVerticalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(175, 175, 175)
+                                .addComponent(recipientNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel2)
-                                        .addComponent(senderICTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel4)
-                                        .addComponent(SenderAdressTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(27, 27, 27)
-                                                .addComponent(jLabel5)
-                                                .addGap(35, 35, 35))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(RecipientICTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel6)
-                                        .addComponent(RecipientAddressTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
-                                .addComponent(jButton1)
-                                .addGap(65, 65, 65))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGap(90, 90, 90)
-                                        .addComponent(jLabel3)
-                                        .addContainerGap(345, Short.MAX_VALUE)))
+                                .addComponent(recipientICTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(163, Short.MAX_VALUE))
         );
 
-        pack();
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 670, 400));
+
+        jMenu1.setText("New Delivery Record");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Track Your Parcel");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
+        setSize(new java.awt.Dimension(714, 550));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            createNewTransaction();
+            createNewDeliveryInfo();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void senderICTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senderICTxtActionPerformed
+    private void DeliverByTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeliverByTxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_senderICTxtActionPerformed
+    }//GEN-LAST:event_DeliverByTxtActionPerformed
 
-    private void orderIDTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDTxtActionPerformed
+    private void orderIDTxt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDTxt1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_orderIDTxtActionPerformed
+    }//GEN-LAST:event_orderIDTxt1ActionPerformed
+
+    private void weightTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_weightTxtActionPerformed
+
+    private void senderPhoneTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senderPhoneTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_senderPhoneTxtActionPerformed
+
+    private void senderNametxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senderNametxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_senderNametxtActionPerformed
+
+    private void recipientPhoneTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipientPhoneTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recipientPhoneTxtActionPerformed
+
+    private void recipientNameTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipientNameTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recipientNameTxtActionPerformed
+
+    private void parcelContentTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parcelContentTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_parcelContentTxtActionPerformed
+
+    private void recipientAddressTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipientAddressTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recipientAddressTxtActionPerformed
+
+    private void recipientICTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipientICTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recipientICTxtActionPerformed
+
+    private void trackingIDTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trackingIDTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_trackingIDTxtActionPerformed
 
     private void SenderAdressTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SenderAdressTxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SenderAdressTxtActionPerformed
 
-    private void RecipientAddressTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipientAddressTxtActionPerformed
+    private void courierTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_courierTxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_RecipientAddressTxtActionPerformed
+    }//GEN-LAST:event_courierTxtActionPerformed
 
-    private void RecipientICTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipientICTxtActionPerformed
+    private void shipOutTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shipOutTxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_RecipientICTxtActionPerformed
+    }//GEN-LAST:event_shipOutTxtActionPerformed
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        ViewDeliveryInfoPage a = new ViewDeliveryInfoPage();
+        a.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenu2MouseClicked
     // End of variables declaration//GEN-END:variables
 
-    private void createNewTransaction() throws Exception {
-        String orderID = orderIDTxt.getText().trim();
-        String senderIC = senderICTxt.getText().trim();
+    private void createNewDeliveryInfo() throws Exception {
+
+        String trackingID = trackingIDTxt.getText().trim();
+        String courierNumber = courierTxt.getText().trim();
+        String shipOutDate = shipOutTxt.getText().trim();
+        String deliverByDate = DeliverByTxt.getText().trim();
+        String orderID = orderIDTxt1.getText().trim();
+        String parcelWeight = weightTxt.getText().trim();
+        String senderName = senderNametxt.getText().trim();
+        String senderPhone = senderPhoneTxt.getText().trim();
         String senderAddress = SenderAdressTxt.getText().trim();
-        String recipientIC = RecipientICTxt.getText().trim();
-        String recipientAddress = RecipientAddressTxt.getText().trim();
-        String sensitiveone = "Sensitive one";
-        String sensitivetwo = "Sensitive two";
+        String recipientName = recipientNameTxt.getText().trim();
+        String recipientIC = recipientICTxt.getText().trim();
+        String recipientPhone = recipientPhoneTxt.getText().trim();
+        String recipientAddress = recipientAddressTxt.getText().trim();
+        String parcelContent = parcelContentTxt.getText().trim();
 
-        DeliveryInfoClass newDeliveryInfo = new DeliveryInfoClass(orderID, senderIC, senderAddress, recipientIC, recipientAddress,sensitiveone,sensitivetwo);
+        if (trackingID.isEmpty() || courierNumber.isEmpty() || shipOutDate.isEmpty() || deliverByDate.isEmpty() ||
+                orderID.isEmpty() || parcelWeight.isEmpty() || senderName.isEmpty() || senderPhone.isEmpty() ||
+                senderAddress.isEmpty() || recipientName.isEmpty() || recipientIC.isEmpty() ||
+                recipientPhone.isEmpty() || recipientAddress.isEmpty() || parcelContent.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        //NewBlockCreator.insertRecord(orderID + "|" + senderIC + "|" + senderAddress + "|" + recipientIC + "|" + recipientAddress+"|"+sensitiveone+"|"+sensitivetwo);
+
+        DeliveryInfoClass newDeliveryInfo = new DeliveryInfoClass(trackingID, orderID, senderName, senderPhone, senderAddress,
+                recipientName, recipientIC, recipientPhone, recipientAddress, parcelContent);
+
         NewBlockCreator.insertRecord(newDeliveryInfo);
 
+        Path filePath = Paths.get("insignificantData.txt");
+        String stringToWrite = String.join(",", trackingID, courierNumber, shipOutDate, deliverByDate, parcelWeight);
+        FileHandler.writeFile(filePath, stringToWrite);
+
+        JOptionPane.showMessageDialog(null, "New Delivery Info created successfully");
+        clearAllTextBox();
+
+        //NewBlockCreator.insertRecord(orderID + "|" + senderIC + "|" + senderAddress + "|" + recipientIC + "|" + recipientAddress+"|"+sensitiveone+"|"+sensitivetwo);
+
+    }
+
+    private void clearAllTextBox() {
+        trackingIDTxt.setText("");
+        courierTxt.setText("");
+        shipOutTxt.setText("");
+        DeliverByTxt.setText("");
+        orderIDTxt1.setText("");
+        weightTxt.setText("");
+        senderNametxt.setText("");
+        senderPhoneTxt.setText("");
+        SenderAdressTxt.setText("");
+        recipientNameTxt.setText("");
+        recipientICTxt.setText("");
+        recipientPhoneTxt.setText("");
+        recipientAddressTxt.setText("");
+        parcelContentTxt.setText("");
     }
 }

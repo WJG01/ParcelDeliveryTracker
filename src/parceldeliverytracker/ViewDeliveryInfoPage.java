@@ -4,26 +4,39 @@
  */
 package parceldeliverytracker;
 
+import javax.swing.*;
+import java.awt.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 /**
  * @author weiju
  */
 public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
+    DeliveryInfoClass foundDeliveryInfo;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton buttonVerify;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField orderIDTxt;
     private javax.swing.JTextArea resultTextArea;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchOrderIDInput;
 
     /**
-     * Creates new form ViewDeliveryInfo
+     * Creates new form ViewDeliveryInfoPage
      */
     public ViewDeliveryInfoPage() {
         initComponents();
+        buttonVerify.setEnabled(false);
     }
 
     /**
@@ -64,6 +77,63 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
     public void searchOrder() throws Exception {
         String searchOrderID = searchOrderIDInput.getText();
+        Path filePath = Paths.get("insignificantData.txt");
+        Stream<String> insignificantRecords = FileHandler.readLines(filePath);
+
+        AtomicBoolean trackingFound = new AtomicBoolean(false);
+        insignificantRecords.forEach(line -> {
+            String[] fields = line.split(",");
+            String orderID = fields[0];
+            if (orderID.equals(searchOrderID)) {
+                fillInDetail(line);
+                trackingFound.set(true);
+                buttonVerify.setEnabled(true);
+            }
+        });
+
+        if (!trackingFound.get()) {
+            JOptionPane.showMessageDialog(null, "Tracking ID not found. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void fillInDetail(String foundLine) {
+        String[] fields = foundLine.split(",");
+
+        // format each field to a specific width using String.format()
+        String basicInfoTitle = String.format("%-22s", "\n Basic Delivery Information:") + "\n   ";
+        String trackingId = String.format("%-24s", "\n\n 1. Tracking ID:  ") + String.format("%-25s", fields[0].trim());
+        String courierNumber = String.format("%-22s", " 2. Courier Number:") + String.format("%-25s", fields[1].trim());
+        String shipOutDate = String.format("%-22s", " 3. ShipOutDate:") + String.format("%-25s", fields[2].trim());
+        String deliverDate = String.format("%-22s", " 4. Deliver Date:") + String.format("%-25s", fields[3].trim());
+        String parcelWeight = String.format("%-22s", " 5. Parcel Weight:") + String.format("%-13s", fields[4].trim());
+
+        String overviewText =
+                basicInfoTitle +
+                trackingId +
+                "\n\n\n" +
+                courierNumber +
+                "\n\n\n" +
+                shipOutDate +
+                "\n\n\n" +
+                deliverDate +
+                "\n\n\n" +
+                parcelWeight;
+
+        // set the font to a fixed width font
+        resultTextArea.setFont(new Font("Courier New", Font.PLAIN, 12));
+        resultTextArea.setText(overviewText);
+
+    }
+
+    public void verifyDelivery(String inputRecipientIC) throws Exception {
+
+        String searchOrderID = searchOrderIDInput.getText();
+
+        if (searchOrderID.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please first search with your tracking ID before verifying", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         System.out.println("Hello");
 
         ReadBlockChain.getBlockChainTransactions();
@@ -72,25 +142,50 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
         for (String record : extractedResult) {
             System.out.println("This is the record:" + record);
             String[] field = record.split("\\|");
-            if (field[0].equals(searchOrderID)) {
+            if (field[0].equals(searchOrderID) && field[6].equals(inputRecipientIC)) {
                 System.out.println("This is the field" + field[0]);
                 System.out.println("found");
-                DeliveryInfoClass foundDeliveryInfo = new DeliveryInfoClass(field[0], field[1], field[2], field[3], field[4],field[5],field[6]);
-                //Transaction foundTransaction = record;
-                fillInTextArea(foundDeliveryInfo);
+                foundDeliveryInfo = new DeliveryInfoClass(field[0], field[1], field[2], field[3], field[4], field[5], field[6], field[7], field[8], field[9]);
+
             }
         }
-    }
 
-    public void fillInTextArea(DeliveryInfoClass deliveryInfoClass) {
-        String textToSet = "OrderID :" + deliveryInfoClass.orderID() +
-                "\n\n Sender IC: " + deliveryInfoClass.senderIC() +
-                "\n\n Sender Address: " + deliveryInfoClass.senderIC() +
-                "\n\n Recipient IC: " + deliveryInfoClass.recipientIC() +
-                "\n\n Recipient Address: " + deliveryInfoClass.recipientAdress();
-        resultTextArea.setText(textToSet);
+        showConfidentialDialog(foundDeliveryInfo);
 
     }
+
+    public void showConfidentialDialog(DeliveryInfoClass foundDeliveryInfo) {
+        String[] columnNames = {"Field", "Information"};
+        Object[][] data = {
+                {"Tracking ID", foundDeliveryInfo.trackingID()},
+                {"Order ID", foundDeliveryInfo.orderID()},
+                {"Sender Name", foundDeliveryInfo.senderName()},
+                {"Sender Phone", foundDeliveryInfo.senderPhone()},
+                {"Sender Address", foundDeliveryInfo.senderAddress()},
+                {"Recipient Name", foundDeliveryInfo.recipientName()},
+                {"Recipient IC", foundDeliveryInfo.recipientIC()},
+                {"Recipient Phone", foundDeliveryInfo.recipientPhone()},
+                {"Recipient Address", foundDeliveryInfo.recipientAddress()},
+                {"Parcel Content", foundDeliveryInfo.parcelContent()}
+        };
+        JTable table = new JTable(data, columnNames);
+        table.setEnabled(false);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(400, 200)); // set preferred size
+
+        JLabel title = new JLabel("Here is the rest of the delivery details");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(Box.createRigidArea(new Dimension(0, 20))); // add spacing before title
+        panel.add(title);
+        panel.add(Box.createRigidArea(new Dimension(0, 40))); // add spacing after title
+        panel.add(scrollPane);
+
+        JOptionPane.showMessageDialog(null, panel, "Verified Successful", JOptionPane.PLAIN_MESSAGE);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,22 +196,26 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        orderIDTxt = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        searchOrderIDInput = new javax.swing.JTextField();
-        searchButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTextArea = new javax.swing.JTextArea();
-
-        orderIDTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                orderIDTxtActionPerformed(evt);
-            }
-        });
+        jLabel1 = new JLabel();
+        searchOrderIDInput = new javax.swing.JTextField();
+        searchButton = new javax.swing.JButton();
+        buttonVerify = new javax.swing.JButton();
+        jLabel2 = new JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Parcel Delivery Tracker");
+        setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Order ID: ");
+        resultTextArea.setColumns(20);
+        resultTextArea.setRows(5);
+        jScrollPane1.setViewportView(resultTextArea);
+
+        jLabel1.setText("Tracking ID: ");
 
         searchOrderIDInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,45 +230,75 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
             }
         });
 
-        resultTextArea.setColumns(20);
-        resultTextArea.setRows(5);
-        jScrollPane1.setViewportView(resultTextArea);
+        buttonVerify.setText("Verify");
+        buttonVerify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonVerifyActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("TRACK YOUR PARCEL");
+
+        jMenu1.setText("New Delivery Record");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Track Your Parcel");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(buttonVerify, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(207, 207, 207))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(59, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(searchOrderIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(27, 27, 27)
-                                                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(45, Short.MAX_VALUE))
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGap(38, 38, 38)
+                                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(115, 115, 115))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(searchOrderIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(53, 53, 53))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(55, 55, 55)
+                                .addContainerGap(23, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(28, 28, 28)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel1)
                                         .addComponent(searchOrderIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(searchButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30))
+                                .addGap(27, 27, 27)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(buttonVerify, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(531, 550));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void orderIDTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_orderIDTxtActionPerformed
 
     private void searchOrderIDInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOrderIDInputActionPerformed
         // TODO add your handling code here:
@@ -182,5 +311,24 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
             throw new RuntimeException(e);
         }
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void buttonVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVerifyActionPerformed
+        String input = JOptionPane.showInputDialog(null, "Enter your IC number :");
+
+        // Check if the input is valid
+        if (input != null && !input.isEmpty()) {
+            try {
+                verifyDelivery(input);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }//GEN-LAST:event_buttonVerifyActionPerformed
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        CreateNewDeliveryPage a = new CreateNewDeliveryPage();
+        a.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenu1MouseClicked
     // End of variables declaration//GEN-END:variables
 }

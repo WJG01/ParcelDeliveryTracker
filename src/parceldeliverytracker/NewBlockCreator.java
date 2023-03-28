@@ -20,18 +20,21 @@ public class NewBlockCreator {
     private static final String fileName = masterFolder + "/chain.bin";
 
     public static void main(String[] args) {
-        try {
-            DeliveryInfoClass newDeliveryInfo = new DeliveryInfoClass("orderID", "senderIC", "senderAddress",
-                    " recipientIC", "recipientAddress", "sensitiveone", "sensitivetwo");
-            //digitalSignature(newTransaction);
-
-            insertRecord(newDeliveryInfo);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            //digitalSignature(newTransaction);
+//
+//            insertRecord(newDeliveryInfo);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 //        Blockchainn bc = Blockchainn.getInstance(fileName);
 //        bc.fetchPreviousBlock();
 //        bc.distribute();
+//        try {
+//            digitalSignature(newDeliveryInfo);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 
@@ -59,7 +62,7 @@ public class NewBlockCreator {
             }
             bc.genesis();
             bc.addTransaction(bc, encrypted);
-            // bc.distribute();
+            bc.distribute();
         } else {
             bc.fetchPreviousBlock();
             bc.addTransaction(bc, encrypted);
@@ -84,7 +87,7 @@ public class NewBlockCreator {
 
 
         FileWriter fileWriter = new FileWriter("DigitalSignatureKeyStore/digitalSignature.txt");
-        String content = newDeliveryInfo.toString() + "," + signature + "," + privateKeyStr + "," + publicKeyStr;
+        String content = newDeliveryInfo + "," + signature + "," + privateKeyStr + "," + publicKeyStr;
         fileWriter.write(content);
         fileWriter.close();
 
@@ -95,20 +98,8 @@ public class NewBlockCreator {
 
         String publicKeystring = field[3];
 
-//        // Remove the header and footer of the key string
-//        publicKeystring = publicKeystring.replace("-----BEGIN PUBLIC KEY-----\n", "");
-//        publicKeystring = publicKeystring.replace("\n-----END PUBLIC KEY-----", "");
-//
-//        // Convert the key string to a byte array
-//        byte[] publicKeyBytes = publicKeystring.getBytes();
-//
-//
-//        // Construct a new PublicKey object from the byte array
-//        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-//        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-//        PublicKey publicKeyread = keyFactory.generatePublic(keySpec);
 
-        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyStr);
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeystring);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
         PublicKey publicKeyread = keyFactory.generatePublic(keySpec);
