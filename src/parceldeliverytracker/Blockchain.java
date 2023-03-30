@@ -55,8 +55,8 @@ public class Blockchain {
         blockDB = getExistingBlockChain(this.chainFile);
     }
 
-    public void addTransaction(Blockchain bc, String txn) {
-// Get the last block in the chain
+    public void addTransaction(String txn) {
+        // Get the last block in the chain
         List<String> lastBlockTransactionLst = new ArrayList<>();
         Transaction lastBlockTransaction = new Transaction();
 
@@ -111,5 +111,6 @@ public class Blockchain {
      */
     public void distribute() {
         String chain = new GsonBuilder().setPrettyPrinting().create().toJson(blockDB);
+        System.out.println(chain);
     }
 }

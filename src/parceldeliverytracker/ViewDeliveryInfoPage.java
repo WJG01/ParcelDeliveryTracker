@@ -6,6 +6,7 @@ package parceldeliverytracker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
@@ -14,7 +15,6 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
@@ -22,7 +22,6 @@ import java.util.stream.Stream;
  * @author weiju
  */
 public class ViewDeliveryInfoPage extends javax.swing.JFrame {
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -35,7 +34,7 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea resultTextArea;
     private javax.swing.JButton searchButton;
-    private javax.swing.JTextField searchOrderIDInput;
+    private javax.swing.JTextField searchTrackingIDInput;
 
     /**
      * Creates new form ViewDeliveryInfoPage
@@ -82,15 +81,24 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
     }
 
     public void searchOrder() throws Exception {
-        String searchOrderID = searchOrderIDInput.getText();
+
+        String searchTrackingID = searchTrackingIDInput.getText();
+
+        if (searchTrackingID.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter the tracking ID", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         Path filePath = Paths.get("insignificantData.txt");
+
         Stream<String> insignificantRecords = FileHandler.readLines(filePath);
 
         AtomicBoolean trackingFound = new AtomicBoolean(false);
         insignificantRecords.forEach(line -> {
-            String[] fields = line.split(",");
-            String orderID = fields[0];
-            if (orderID.equals(searchOrderID)) {
+            System.out.println("Existing insignificant: "+line);
+            String[] fields = line.split("\\|");
+            String trackingID = fields[0];
+            if (trackingID.equals(searchTrackingID)) {
                 fillInDetail(line);
                 trackingFound.set(true);
                 buttonVerify.setEnabled(true);
@@ -103,7 +111,7 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
     }
 
     public void fillInDetail(String foundLine) {
-        String[] fields = foundLine.split(",");
+        String[] fields = foundLine.split("\\|");
 
         // format each field to a specific width using String.format()
         String basicInfoTitle = String.format("%-22s", "\n Basic Delivery Information:") + "\n   ";
@@ -133,63 +141,50 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
     public void verifyDelivery(String inputRecipientIC) throws Exception {
 
-        String searchTrackingID = searchOrderIDInput.getText();
-        DeliveryInfoClass foundDeliveryInfo = null;
+        String searchTrackingID = searchTrackingIDInput.getText();
 
         if (searchTrackingID.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please first search with your tracking ID before verifying", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        BlockReader.getBlockChainTransactions();
-        List<String> extractedResult = BlockReader.extractedResult;
-
-        //String foundRecordBlockChain = "";
-
-        for (String record : extractedResult) {
-            System.out.println("Record found :" + record);
-            String[] field = record.split("\\|");
-            if (field[0].equals(searchTrackingID) && field[6].equals(inputRecipientIC)) {
-                //foundRecordBlockChain = record;
-                foundDeliveryInfo = new DeliveryInfoClass(field[0], field[1], field[2], field[3], field[4], field[5], field[6], field[7], field[8], field[9]);
-
-            }
-        }
-
-
-        MySignature sig = new MySignature();
-        Path filePath = Paths.get("DigitalSignatureKeyStore/digitalSignature.txt");
-        Stream<String> digitalSignatureRecords = FileHandler.readLines(filePath);
-
-        AtomicBoolean isValid = new AtomicBoolean(false);
-
-        digitalSignatureRecords.forEach(line -> {
-            String[] fields = line.split(",");
-            String trackingID = fields[0];
-
-            if (trackingID.equals(searchTrackingID)) {
-                try {
-                    PublicKey publicKeyRead = convertStringToPublicKey(fields[4]);
-                    //set isValid to true if match
-                    isValid.set(sig.verify(fields[1], fields[2], publicKeyRead));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-
-        });
+        DeliveryInfoClass foundDeliveryInfo = BlockReader.searchBlockChainTransactions(searchTrackingID, inputRecipientIC);
 
         if (foundDeliveryInfo != null) {
+            MySignature sig = new MySignature();
+            Path filePath = Paths.get("DigitalSignatureKeyStore/digitalSignature.txt");
+            Stream<String> digitalSignatureRecords = FileHandler.readLines(filePath);
+
+            AtomicBoolean isValid = new AtomicBoolean(false);
+
+            digitalSignatureRecords.forEach(line -> {
+                String[] fields = line.split("/anotherField/");
+                String trackingID = fields[0];
+
+                if (trackingID.equals(searchTrackingID)) {
+                    try {
+                        PublicKey publicKeyRead = convertStringToPublicKey(fields[4]);
+                        //set isValid to true if match
+                        isValid.set(sig.verify(fields[1], fields[2], publicKeyRead));
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Invalid public key",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        throw new RuntimeException(e);
+
+                    }
+                }
+            });
 
             if (isValid.get()) {
                 showConfidentialDialog(foundDeliveryInfo);
 
             } else {
-                JOptionPane.showMessageDialog(null, "Verification failed with IC number", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Verification failed with IC number",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Does not match any record from blockchain", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Does not match any record from blockchain", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -249,7 +244,7 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTextArea = new javax.swing.JTextArea();
         jLabel1 = new JLabel();
-        searchOrderIDInput = new javax.swing.JTextField();
+        searchTrackingIDInput = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
         buttonVerify = new javax.swing.JButton();
         jLabel2 = new JLabel();
@@ -267,9 +262,9 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
 
         jLabel1.setText("Tracking ID: ");
 
-        searchOrderIDInput.addActionListener(new java.awt.event.ActionListener() {
+        searchTrackingIDInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchOrderIDInputActionPerformed(evt);
+                searchTrackingIDInputActionPerformed(evt);
             }
         });
 
@@ -324,7 +319,7 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
                                                                 .addGap(115, 115, 115))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                .addComponent(searchOrderIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(searchTrackingIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                 .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGap(53, 53, 53))
@@ -337,7 +332,7 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
                                 .addGap(28, 28, 28)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel1)
-                                        .addComponent(searchOrderIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(searchTrackingIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(searchButton))
                                 .addGap(27, 27, 27)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -350,9 +345,9 @@ public class ViewDeliveryInfoPage extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchOrderIDInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOrderIDInputActionPerformed
+    private void searchTrackingIDInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTrackingIDInputActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_searchOrderIDInputActionPerformed
+    }//GEN-LAST:event_searchTrackingIDInputActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         try {

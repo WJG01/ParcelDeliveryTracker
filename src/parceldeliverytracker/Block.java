@@ -57,9 +57,11 @@ public class Block implements Serializable {
         }
 
         public void setCurrentHash(String merkleRoot) {
-            // hashing with sha256 - the input is joined with previousHash+now+generated merkle root
+            // hashing with sha256 - the input is joined with
+            // previousHash+now+generated merkle root
             long now = System.currentTimeMillis();
-            String currentHash = Hasher.sha256(String.join("+", previousHash, String.valueOf(now), merkleRoot));
+            String currentHash = Hasher.sha256(String.join("+", previousHash,
+                    String.valueOf(now), merkleRoot));
             this.currentHash = currentHash;
         }
 

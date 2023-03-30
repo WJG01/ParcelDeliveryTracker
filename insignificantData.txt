@@ -1,4 +1,1 @@
-T00001,CAN00001,23-09-2022,27-09-2022,23kg
-T000002,CAN034583458,12-05-2023,16-05-2023,35kg
-T000003,CAN04756378,12-08-2023,12-03-2023,24kg
-testingtrackingid,testingcourieraccountnumber,testingshipoutdate,testingdeliverbydate,testingparcelweight
+T00001|CAN00023|12-03-2023|15-03-2023|23kg

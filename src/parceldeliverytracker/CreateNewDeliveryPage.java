@@ -5,6 +5,8 @@
 package parceldeliverytracker;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -445,13 +447,23 @@ public class CreateNewDeliveryPage extends javax.swing.JFrame {
         //add significant data into blockchain
         NewBlockCreator.insertRecord(newDeliveryInfo);
 
-        //add insignificant data into text file
-        Path filePath = Paths.get("insignificantData.txt");
-        String stringToWrite = String.join(",", trackingID, courierNumber, shipOutDate, deliverByDate, parcelWeight);
-        FileHandler.writeFile(filePath, stringToWrite);
+        
+        String stringToWrite = String.join("|", trackingID, courierNumber, shipOutDate, deliverByDate, parcelWeight);
+        writeInsignificant(stringToWrite);
 
         JOptionPane.showMessageDialog(null, "New Delivery Info created successfully");
         clearAllTextBox();
+
+    }
+
+    public void writeInsignificant(String stringToWrite) throws IOException {
+        //add insignificant data into text file
+        Path filePath = Paths.get("insignificantData.txt");
+
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
+        }
+        FileHandler.writeFile(filePath, stringToWrite);
 
     }
 
